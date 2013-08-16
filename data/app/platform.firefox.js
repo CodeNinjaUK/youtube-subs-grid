@@ -1,0 +1,29 @@
+var YTG = YTG || {};
+
+YTG.platform = (function (YTG, platform) {
+
+	platform.getStorageItem = function(key, callback)
+	{
+		var message = { method: 'fetch', 'key': key };
+		
+		callback(platform.storage);
+	};
+
+	platform.setStorageItem = function(key, value)
+	{
+		var message = {
+						method: 'store',
+						key: key,
+						value: value
+					};
+		platform.storage[key] = value;
+		self.port.emit("storage", platform.storage);
+	};
+
+	return platform;
+}(YTG, YTG.platform || {}));
+
+self.port.on('storageObject', function(storageObject)
+{
+	YTG.platform.storage = storageObject;
+});

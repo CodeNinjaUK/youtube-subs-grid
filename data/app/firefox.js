@@ -1,0 +1,57 @@
+var pageMod = require("sdk/page-mod");
+// Import the self API
+var self = require("sdk/self");
+var storageObject = require("sdk/simple-storage").storage;
+ 
+// Create a page mod
+// It will run a script whenever a ".org" URL is loaded
+// The script replaces the page contents with a message
+pageMod.PageMod({
+	include: ["http://www.youtube.com/feed/subscriptions", "https://www.youtube.com/feed/subscriptions"],
+	contentStyleFile: self.data.url("assets/youtube.css")
+});
+
+var workers = [];
+
+pageMod.PageMod({
+	include: "*.youtube.com",
+	contentScriptFile: [
+		self.data.url("bower_components/jquery/jquery.min.js"),
+		self.data.url("app/platform.firefox.js"),
+		self.data.url("app/subscriptions.js"),
+		self.data.url("app/history.js"),
+		self.data.url("app/main.js")
+	],
+	'contentScriptWhen' : 'start',
+	onAttach: function(worker)
+	{
+		workers.push(worker);
+
+		worker.port.on('storage', handleStorage);
+		worker.port.emit("storageObject", storageObject);
+
+		worker.on('detach', function () {
+			handleDetach(this);
+		});
+  }
+});
+
+function handleStorage(storage)
+{
+	storageObject = storage;
+
+	// Send out the good stuff.
+	workers.forEach(function(worker)
+	{
+		worker.port.emit("storageObject", storageObject);
+	});
+}
+
+function handleDetach(worker)
+{
+	var index = workers.indexOf(worker);
+	if(index != -1)
+	{
+		workers.splice(index, 1);
+	}
+}

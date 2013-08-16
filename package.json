@@ -1,0 +1,11 @@
+{
+  "name": "better-youtube-subs",
+  "fullName": "Youtube Subscriptions Grid",
+  "id": "jid1-PmCaAQKMFABjHg",
+  "description": "Transforms Youtube's broken feed subscription page and restore it to it's former grid glory.",
+  "author": "Bulk70",
+  "license": "MPL 2.0",
+  "version": "1.2",
+  "lib": "data/app",
+  "main": "firefox.js"
+}

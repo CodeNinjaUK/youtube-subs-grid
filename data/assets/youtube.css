@@ -1,0 +1,68 @@
+a.feed-author-bubble.yt-uix-sessionlink {
+    display: none !important;
+}
+
+div.branded-page-v2-secondary-col {
+    display: none !important;
+}
+
+div.feed-item-main {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.yt-lockup.yt-lockup-tile .yt-lockup-thumbnail {
+    float: none !important;
+   /* margin-bottom: 17px !important;*/
+}
+
+#page {
+    width: 97.925%
+ !important;
+}
+
+.yt-lockup-description {
+    display: none !important;
+}
+
+.feed-list-item {
+    float: left !important;
+    width: 165px !important;
+    height: 195px !important;
+    border: 0 !important;
+    margin-top: 10px !important;
+}
+
+.feed-item-container .feed-item-main {
+    border: 0 !important;
+}
+
+.feed-item-container .feed-item-main-content {
+  /*  margin-top: -130px !important;*/
+}
+
+page {
+    width: 97.925% !important;
+}
+
+.feed-load-more-container {
+    float: left !important;
+}
+
+
+.feed-item-main .feed-item-header {
+   display:none;
+}
+
+.yt-lockup-meta, .yt-lockup-description, .yt-lockup-badges {
+    float: left !important;
+}
+
+.yt-lockup-tile .yt-lockup-meta-info>li:before
+{
+    content: none !important;
+}
+
+.yt-lockup-meta-info>li {
+    line-height: 15px !important;
+}
