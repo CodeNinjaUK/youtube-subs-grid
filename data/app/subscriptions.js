@@ -45,12 +45,16 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		{
 			var videoId = $(video).find('[data-context-item-type="video"]').attr('data-context-item-id');
 
+			YTG.subscriptions.cleanVideo(video);
+
 			if (YTG.history.videoIsInHistory(videoId))
 			{
 				subscriptions.markVideo(video);
 			}
-
-			YTG.subscriptions.cleanVideo(video);
+			else
+			{
+				subscriptions.unmarkVideo(video);
+			}
 		});
 	};
 
@@ -60,6 +64,7 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		{
 			$(videoElm).addClass('watched');
 			$(videoElm).find('a.ux-thumb-wrap').prepend('<div class="watched-message">WATCHED</div>');
+			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
 		}
 
 		if(subscriptions.hideVideos)
@@ -70,6 +75,18 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		{
 			$(videoElm).show();
 		}
+	};
+
+	subscriptions.unmarkVideo = function(videoElm)
+	{
+		if ($(videoElm).hasClass('watched'))
+		{
+			$(videoElm).removeClass('watched');
+			$(videoElm).find('.watched-message').remove();
+			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
+		}
+
+		$(videoElm).show();
 	};
 
 	subscriptions.cleanVideo = function(videoElm)
@@ -86,6 +103,15 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			$(videoElm).find('.yt-lockup-meta-info').append('<li><p>'+views+'</p></li>');
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
 
+			// Set up the mark as watched button. 
+			var button = $(videoElm).find('.addto-watch-later-button').clone();
+
+			button.removeClass('addto-watch-later-button');
+			button.addClass('ytg-mark-watched');
+			button.attr('data-tooltip-text', 'Mark as watched');
+
+			$(videoElm).find('.contains-addto').append(button);
+
 			$(videoElm).addClass('ytg-cleaned');
 		}
 	};
@@ -97,7 +123,6 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			// Refetch the watch history in case it changed
 			YTG.platform.getStorageItem('watchHistory', function(data)
 			{
-				//console.log(JSON.stringify(data));
 				YTG.history.setHistory(data.watchHistory);
 				YTG.subscriptions.markVideos();
 

@@ -1,3 +1,28 @@
+button.ytg-mark-watched {
+    right:0 !important;
+    left: 2px !important;
+}
+
+button.ytg-mark-watched img {
+    background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfla-Zaz2.png) -83px -298px !important;
+    height: 13px !important;
+    width: 13px !important;
+}
+
+.watched button.ytg-mark-watched img {
+    background: url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfla-Zaz2.png) -202px -337px no-repeat !important;
+    width: 21px !important;
+    height: 21px !important;
+}
+
+.watched button.yt-uix-button-default.ytg-mark-watched {
+    background-image: -moz-linear-gradient(top,#74a446 0,#4d7730 100%) !important;
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#74a446),color-stop(100%,#4d7730)) !important;
+    background-image: -webkit-linear-gradient(top,#74a446 0,#4d7730 100%) !important;
+    background-image: linear-gradient(to bottom,#74a446 0,#4d7730 100%) !important;
+}
+
+
 a.feed-author-bubble.yt-uix-sessionlink {
     display: none !important;
 }

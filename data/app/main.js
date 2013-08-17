@@ -5,6 +5,7 @@ $(document).ready(function(){
 
 		// Record all links leading to videos.
 		$('#page').on('click', '[data-context-item-type="video"] a', YTG.history.addToHistoryHandler);
+		$('#page').on('click', '.ytg-mark-watched', YTG.history.toggleWatchedHandler);
 
 		// Is this a video watch page? Make sure we store that in the history
 		// in case the user came from an external source.
