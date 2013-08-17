@@ -24,8 +24,6 @@ YTG.history = (function (YTG, history) {
 
 	history.addToHistoryHandler = function(e)
 	{
-		e.preventDefault();
-
 		// If we clicked on the watch later button we dont want to
 		// mark it as watched now, do we?
 
