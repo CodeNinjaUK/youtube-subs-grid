@@ -2,6 +2,12 @@ var YTG = YTG || {};
 
 YTG.history = (function (YTG, history) {
 
+	// We don't have unlimted storage
+	// so there needs to be a limit on 
+	// how big this history is.
+	history.maxVideoHistoryCount = 1000;
+	
+	
 	history.setHistory = function(watchHistory)
 	{
 		history.watchHistory = watchHistory || [];
@@ -9,6 +15,8 @@ YTG.history = (function (YTG, history) {
 
 	history.addToHistory = function(videoId)
 	{
+		history.cullHistory();
+
 		if (!history.videoIsInHistory(videoId))
 		{
 			history.watchHistory.push(videoId);
@@ -20,6 +28,11 @@ YTG.history = (function (YTG, history) {
 				YTG.subscriptions.markVideos();
 			}
 		}
+	};
+
+	history.cullHistory = function()
+	{
+		history.watchHistory.splice(0, (history.watchHistory.length - history.maxVideoHistoryCount));
 	};
 
 	history.removeFromHistory = function(videoId)

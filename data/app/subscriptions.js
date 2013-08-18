@@ -84,6 +84,8 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			$(videoElm).removeClass('watched');
 			$(videoElm).find('.watched-message').remove();
 			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
+
+			$(videoElm).show();
 		}
 	};
 
