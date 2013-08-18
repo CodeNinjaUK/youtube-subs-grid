@@ -22,6 +22,11 @@ $(document).ready(function(){
 				YTG.subscriptions.setHideVideos(data.hideVideos);
 				YTG.subscriptions.setup();
 			});
+
+			/* CSS fix for the subs page */
+			$('.branded-page-v2-primary-col').addClass('clearfix');
 		}
+
+
 	});
 });

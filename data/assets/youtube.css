@@ -91,3 +91,7 @@ page {
 .yt-lockup-meta-info>li {
     line-height: 15px !important;
 }
+
+/* Remove the overflow so that the video action menu doesn't clip */
+.feed-header { height: 32px !important; }
+.branded-page-v2-primary-col { overflow: visible !important; }
