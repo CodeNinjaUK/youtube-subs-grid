@@ -9,6 +9,7 @@ A browser extension for Chrome an Firefox to fix Youtube's broken subscription f
 * Monitor on site activity and keeps track of which videos you've watched.
 * Mark watched videos on your subscriptions page. Optionally hide them completely. 
 * Mark videos watched or unwatched manually.
+* Mark all visible videos as watched.
 
 ### Getting the extension
 

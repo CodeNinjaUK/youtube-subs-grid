@@ -16,7 +16,7 @@ var workers = [];
 pageMod.PageMod({
 	include: "*.youtube.com",
 	contentScriptFile: [
-		self.data.url("bower_components/jquery/jquery.min.js"),
+		self.data.url("assets/jquery.min.js"),
 		self.data.url("app/platform.firefox.js"),
 		self.data.url("app/subscriptions.js"),
 		self.data.url("app/history.js"),
