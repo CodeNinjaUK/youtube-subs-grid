@@ -15,18 +15,32 @@ YTG.history = (function (YTG, history) {
 
 	history.addToHistory = function(videoId)
 	{
-		history.cullHistory();
-
 		if (!history.videoIsInHistory(videoId))
 		{
 			history.watchHistory.push(videoId);
 
-			YTG.platform.setStorageItem('watchHistory', history.watchHistory);
+			history.saveHistory();
+		}
+	};
 
-			if (YTG.subscriptions)
+	history.massAddToHistory = function(videoIdArray)
+	{
+		videoIdArray.forEach(function(videoId)
+		{
+			if (!history.videoIsInHistory(videoId))
 			{
-				YTG.subscriptions.markVideos();
+				history.watchHistory.push(videoId);
 			}
+		});
+
+		history.saveHistory();
+	};
+
+	history.updateSubscriptions = function()
+	{
+		if (YTG.subscriptions)
+		{
+			YTG.subscriptions.markVideos();
 		}
 	};
 
@@ -39,7 +53,8 @@ YTG.history = (function (YTG, history) {
 	{
 		var index = history.watchHistory.indexOf(videoId);
 		removed = history.watchHistory.splice(index, 1);
-		YTG.platform.setStorageItem('watchHistory', history.watchHistory);
+		
+		history.saveHistory();
 
 		if (YTG.subscriptions)
 		{
@@ -82,6 +97,14 @@ YTG.history = (function (YTG, history) {
 		}
 
 		return false;
+	};
+
+	history.saveHistory = function()
+	{
+		history.cullHistory();
+		YTG.platform.setStorageItem('watchHistory', history.watchHistory);
+
+		history.updateSubscriptions();
 	};
 
 	history.videoIsInHistory = function(videoId)

@@ -35,6 +35,26 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		$('#channel-navigation-menu').on('click', '.view-toggle-button', YTG.subscriptions.toggleVideos);
 
 		YTG.subscriptions.setViewToggle();
+
+		// Add mark all videos as watched button.
+		$('#channel-navigation-menu').append('<li><p><button aria-label="Show watched videos" type="button" class="yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" role="button" id="markAllVideos"><span class="yt-uix-button-content">Mark all videos as watched</span></button></p></li>');
+
+		$('#channel-navigation-menu').on('click', '#markAllVideos', YTG.subscriptions.markAllVisibleVideos);
+	};
+
+	subscriptions.markAllVisibleVideos = function()
+	{
+		var videos = $('.feed-list-item');
+
+		var videoArray = [];
+		videos.each(function(idx, video)
+		{
+			var videoId = $(video).find('[data-context-item-type="video"]').attr('data-context-item-id');
+
+			videoArray.push(videoId);
+		});
+
+		YTG.history.massAddToHistory(videoArray);
 	};
 
 	subscriptions.markVideos = function()
