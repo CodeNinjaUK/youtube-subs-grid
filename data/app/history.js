@@ -52,14 +52,9 @@ YTG.history = (function (YTG, history) {
 	history.removeFromHistory = function(videoId)
 	{
 		var index = history.watchHistory.indexOf(videoId);
-		removed = history.watchHistory.splice(index, 1);
+		history.watchHistory.splice(index, 1);
 		
 		history.saveHistory();
-
-		if (YTG.subscriptions)
-		{
-			YTG.subscriptions.markVideos();
-		}
 	};
 
 	history.addToHistoryHandler = function(e)
