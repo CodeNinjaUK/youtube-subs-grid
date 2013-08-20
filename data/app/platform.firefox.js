@@ -11,11 +11,6 @@ YTG.platform = (function (YTG, platform) {
 
 	platform.setStorageItem = function(key, value)
 	{
-		var message = {
-						method: 'store',
-						key: key,
-						value: value
-					};
 		platform.storage[key] = value;
 		self.port.emit("storage", platform.storage);
 	};

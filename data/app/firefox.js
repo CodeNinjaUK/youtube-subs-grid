@@ -1,7 +1,7 @@
 var pageMod = require("sdk/page-mod");
 // Import the self API
 var self = require("sdk/self");
-var storageObject = require("sdk/simple-storage").storage;
+var storageObject = require("sdk/simple-storage");
  
 // Create a page mod
 // It will run a script whenever a ".org" URL is loaded
@@ -28,7 +28,7 @@ pageMod.PageMod({
 		workers.push(worker);
 
 		worker.port.on('storage', handleStorage);
-		worker.port.emit("storageObject", storageObject);
+		worker.port.emit("storageObject", storageObject.storage);
 
 		worker.on('detach', function () {
 			handleDetach(this);
@@ -38,12 +38,12 @@ pageMod.PageMod({
 
 function handleStorage(storage)
 {
-	storageObject = storage;
+	storageObject.storage = storage;
 
 	// Send out the good stuff.
 	workers.forEach(function(worker)
 	{
-		worker.port.emit("storageObject", storageObject);
+		worker.port.emit("storageObject", storageObject.storage);
 	});
 }
 
