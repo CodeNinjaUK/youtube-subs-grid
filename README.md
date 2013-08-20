@@ -24,3 +24,7 @@ The extensions are available on their respective extension websites.
 ### Contributing
 
 Pull requests and feature suggestions welcome!
+
+### Roadmap
+
+https://github.com/CodeNinjaUK/youtube-subs-grid/wiki/Roadmap
