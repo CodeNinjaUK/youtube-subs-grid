@@ -18,8 +18,8 @@ YTG.history = (function (YTG, history) {
 		if (!history.videoIsInHistory(videoId))
 		{
 			history.watchHistory.push(videoId);
-
 			history.saveHistory();
+			history.updateSubscriptions();
 		}
 	};
 
@@ -33,6 +33,22 @@ YTG.history = (function (YTG, history) {
 			}
 		});
 
+		history.saveHistory();
+		history.updateSubscriptions();
+	};
+
+	history.massRemoveFromHistory = function(videoIdArray)
+	{
+		videoIdArray.forEach(function(videoId)
+		{
+			if (history.videoIsInHistory(videoId))
+			{
+				var index = history.watchHistory.indexOf(videoId);
+				history.watchHistory.splice(index, 1);
+			}
+		});
+
+		// Don't trigger subs update for this save.
 		history.saveHistory();
 	};
 
@@ -51,10 +67,14 @@ YTG.history = (function (YTG, history) {
 
 	history.removeFromHistory = function(videoId)
 	{
-		var index = history.watchHistory.indexOf(videoId);
-		history.watchHistory.splice(index, 1);
-		
-		history.saveHistory();
+		if (history.videoIsInHistory(videoId))
+		{
+			var index = history.watchHistory.indexOf(videoId);
+			history.watchHistory.splice(index, 1);
+
+			history.saveHistory();
+			history.updateSubscriptions();
+		}
 	};
 
 	history.addToHistoryHandler = function(e)
@@ -72,7 +92,7 @@ YTG.history = (function (YTG, history) {
 	history.toggleWatchedHandler = function(e)
 	{
 		var videoId = $(this).parents('[data-context-item-id]').attr('data-context-item-id');
-		
+
 		if (history.videoIsInHistory(videoId))
 		{
 			history.removeFromHistory(videoId);
@@ -98,8 +118,6 @@ YTG.history = (function (YTG, history) {
 	{
 		history.cullHistory();
 		YTG.platform.setStorageItem('watchHistory', history.watchHistory);
-
-		history.updateSubscriptions();
 	};
 
 	history.videoIsInHistory = function(videoId)

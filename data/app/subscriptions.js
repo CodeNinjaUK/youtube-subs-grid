@@ -3,6 +3,7 @@ var YTG = YTG || {};
 YTG.subscriptions = (function (YTG, subscriptions) {
 	subscriptions.setup = function()
 	{
+		YTG.subscriptions.markYTVideos();
 		YTG.subscriptions.markVideos();
 
 		// YT loads in more videos on big screens.
@@ -57,55 +58,63 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		YTG.history.massAddToHistory(videoArray);
 	};
 
+	// Get all videos marked as watched on the 
+	// YT side of things, remove them from our 
+	// internal history
+	subscriptions.markYTVideos = function()
+	{
+		var videos = [];
+		$('.watched').each(function(idx, elm)
+		{
+			var videoId = $(elm).parents('[data-context-item-type="video"]').attr('data-context-item-id');
+			videos.push(videoId);
+		});
+
+		YTG.history.massRemoveFromHistory(videos);
+	};
+
 	subscriptions.markVideos = function()
 	{
 		var videos = $('.feed-list-item');
 
 		videos.each(function(idx, video)
 		{
-			var videoId = $(video).find('[data-context-item-type="video"]').attr('data-context-item-id');
-
-			YTG.subscriptions.cleanVideo(video);
-
-			if (YTG.history.videoIsInHistory(videoId))
-			{
-				subscriptions.markVideo(video);
-			}
-			else
-			{
-				subscriptions.unmarkVideo(video);
-			}
+			subscriptions.cleanVideo(video);
+			subscriptions.markVideo(video);
 		});
 	};
 
 	subscriptions.markVideo = function(videoElm)
 	{
-		if (!$(videoElm).hasClass('watched'))
+		var videoId = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-id');
+		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a.ux-thumb-wrap');
+
+		if (!videoLinkElm.hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
 		{
-			$(videoElm).addClass('watched');
-			$(videoElm).find('a.ux-thumb-wrap').prepend('<div class="watched-message">WATCHED</div>');
-			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
+			videoLinkElm.addClass('ytg-watched');
+			videoLinkElm.prepend('<div class="watched-message">WATCHED</div>');
+			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
+		}
+		else if(videoLinkElm.hasClass('ytg-watched') && !YTG.history.videoIsInHistory(videoId))
+		{
+			videoLinkElm.removeClass('ytg-watched');
+			videoLinkElm.find('.watched-message').remove();
+			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
 		}
 
-		if(subscriptions.hideVideos)
+		// Can't unmark these ones.
+		if (videoLinkElm.hasClass('watched'))
 		{
-			$(videoElm).hide();
+			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Cannot changed watched status');
+		}
+
+		if (videoLinkElm.hasClass('ytg-watched') || videoLinkElm.hasClass('watched'))
+		{
+			videoLinkElm.parents('.feed-list-item').addClass('ytg-contains-watched');
 		}
 		else
 		{
-			$(videoElm).show();
-		}
-	};
-
-	subscriptions.unmarkVideo = function(videoElm)
-	{
-		if ($(videoElm).hasClass('watched'))
-		{
-			$(videoElm).removeClass('watched');
-			$(videoElm).find('.watched-message').remove();
-			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
-
-			$(videoElm).show();
+			videoLinkElm.parents('.feed-list-item').removeClass('ytg-contains-watched');
 		}
 	};
 
@@ -123,17 +132,22 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			$(videoElm).find('.yt-lockup-meta-info').append('<li><p>'+views+'</p></li>');
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
 
-			// Set up the mark as watched button. 
-			var button = $(videoElm).find('.addto-watch-later-button').clone();
-
-			button.removeClass('addto-watch-later-button');
-			button.addClass('ytg-mark-watched');
-			button.attr('data-tooltip-text', 'Mark as watched');
-
-			$(videoElm).find('.contains-addto').append(button);
+			subscriptions.addMarkWatchedBtn(videoElm);
 
 			$(videoElm).addClass('ytg-cleaned');
 		}
+	};
+
+	subscriptions.addMarkWatchedBtn = function(videoElm)
+	{
+		// Set up the mark as watched button. 
+		var button = $(videoElm).find('.addto-watch-later-button').clone();
+
+		button.removeClass('addto-watch-later-button');
+		button.addClass('ytg-mark-watched');
+		button.attr('data-tooltip-text', 'Mark as watched');
+
+		$(videoElm).find('.contains-addto').append(button);
 	};
 
 	subscriptions.timedVideoMark = function(ms, loop)
@@ -179,13 +193,13 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		if (subscriptions.hideVideos)
 		{
 			$('#hideVideos').addClass('yt-uix-button-toggled');
+			$('#page').addClass('ytg-hide-watched-videos');
 		}
 		else
 		{
 			$('#showVideos').addClass('yt-uix-button-toggled');
+			$('#page').removeClass('ytg-hide-watched-videos');
 		}
-
-		subscriptions.markVideos();
 	};
 
 	return subscriptions;
