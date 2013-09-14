@@ -2,7 +2,7 @@ var pageMod = require("sdk/page-mod");
 // Import the self API
 var self = require("sdk/self");
 var storageObject = require("sdk/simple-storage");
- 
+
 // Create a page mod
 // It will run a script whenever a ".org" URL is loaded
 // The script replaces the page contents with a message
@@ -18,7 +18,7 @@ pageMod.PageMod({
 	contentScriptFile: [
 		self.data.url("assets/jquery.min.js"),
 		self.data.url("app/platform.firefox.js"),
-		self.data.url("app/subscriptions.js"),
+		self.data.url("app/grid.js"),
 		self.data.url("app/history.js"),
 		self.data.url("app/main.js")
 	],

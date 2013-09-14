@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 		// Record all links leading to videos.
 		$('#page').on('click', '[data-context-item-type="video"] a', YTG.history.addToHistoryHandler);
-		
+
 		// Is this a video watch page? Make sure we store that in the history
 		// in case the user came from an external source.
 		if ($('meta[itemprop="videoId"]').length)
@@ -21,8 +21,8 @@ $(document).ready(function(){
 
 			YTG.platform.getStorageItem('hideVideos', function(data)
 			{
-				YTG.subscriptions.setHideVideos(data.hideVideos);
-				YTG.subscriptions.setup();
+				YTG.grid.setHideVideos(data.hideVideos);
+				YTG.grid.setup();
 			});
 
 			/* CSS fix for the subs page */

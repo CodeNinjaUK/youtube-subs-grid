@@ -54,9 +54,9 @@ YTG.history = (function (YTG, history) {
 
 	history.updateSubscriptions = function()
 	{
-		if (YTG.subscriptions)
+		if (YTG.grid)
 		{
-			YTG.subscriptions.markVideos();
+			YTG.grid.markVideos();
 		}
 	};
 

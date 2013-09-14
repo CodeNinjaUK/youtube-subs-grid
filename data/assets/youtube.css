@@ -108,4 +108,5 @@ page {
 
 /* Remove the overflow so that the video action menu doesn't clip */
 .feed-header { height: 32px !important; }
+.feed-header.collection { height: 100px !important; }
 .branded-page-v2-primary-col { overflow: visible !important; }

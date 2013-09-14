@@ -1,10 +1,10 @@
 var YTG = YTG || {};
 
-YTG.subscriptions = (function (YTG, subscriptions) {
-	subscriptions.setup = function()
+YTG.grid = (function (YTG, grid) {
+	grid.setup = function()
 	{
-		YTG.subscriptions.markYTVideos();
-		YTG.subscriptions.markVideos();
+		YTG.grid.markYTVideos();
+		YTG.grid.markVideos();
 
 		// YT loads in more videos on big screens.
 		// We wait a few seconds so we can mark those videos too.
@@ -12,12 +12,12 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		//  I'd much prefer to bind to an AJAX event if
 		//  possible.
 		//
-		YTG.subscriptions.timedVideoMark(2000);
+		YTG.grid.timedVideoMark(2000);
 
 		// Drop in to a longer monitoring loop
 		// to mark videos watched while away
 		// from the page as watched.
-		YTG.subscriptions.timedVideoMark(10000, true);
+		YTG.grid.timedVideoMark(10000, true);
 
 
 		$('.feed-list-item').on('mousedown', function(e)
@@ -27,23 +27,23 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			// opens a video in a new tab it'll be marked
 			// pretty quickly so we don't have to wait
 			// for the main mark loop.
-			YTG.subscriptions.timedVideoMark(2000);
+			YTG.grid.timedVideoMark(2000);
 		});
 
 		// Append our show/hide toggle
 		$('#channel-navigation-menu').append('<li><p> Watched videos: <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required"><button aria-label="Show watched videos" type="button" class="start view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" data-button-toggle="true" role="button" id="showVideos"><span class="yt-uix-button-content">Show</span></button></span><span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required"><button aria-label="Hide watched videos" type="button" class="end view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" data-button-toggle="true" role="button" id="hideVideos"><span class="yt-uix-button-content">Hide</span></button></p></li>');
 
-		$('#channel-navigation-menu').on('click', '.view-toggle-button', YTG.subscriptions.toggleVideos);
+		$('#channel-navigation-menu').on('click', '.view-toggle-button', YTG.grid.toggleVideos);
 
-		YTG.subscriptions.setViewToggle();
+		YTG.grid.setViewToggle();
 
 		// Add mark all videos as watched button.
 		$('#channel-navigation-menu').append('<li><p><button aria-label="Show watched videos" type="button" class="yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" role="button" id="markAllVideos"><span class="yt-uix-button-content">Mark all videos as watched</span></button></p></li>');
 
-		$('#channel-navigation-menu').on('click', '#markAllVideos', YTG.subscriptions.markAllVisibleVideos);
+		$('#channel-navigation-menu').on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
 	};
 
-	subscriptions.markAllVisibleVideos = function()
+	grid.markAllVisibleVideos = function()
 	{
 		var videos = $('.feed-list-item');
 
@@ -61,7 +61,7 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 	// Get all videos marked as watched on the 
 	// YT side of things, remove them from our 
 	// internal history
-	subscriptions.markYTVideos = function()
+	grid.markYTVideos = function()
 	{
 		var videos = [];
 		$('.watched').each(function(idx, elm)
@@ -73,18 +73,18 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		YTG.history.massRemoveFromHistory(videos);
 	};
 
-	subscriptions.markVideos = function()
+	grid.markVideos = function()
 	{
 		var videos = $('.feed-list-item');
 
 		videos.each(function(idx, video)
 		{
-			subscriptions.cleanVideo(video);
-			subscriptions.markVideo(video);
+			grid.cleanVideo(video);
+			grid.markVideo(video);
 		});
 	};
 
-	subscriptions.markVideo = function(videoElm)
+	grid.markVideo = function(videoElm)
 	{
 		var videoId = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-id');
 		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a.ux-thumb-wrap');
@@ -118,7 +118,7 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		}
 	};
 
-	subscriptions.cleanVideo = function(videoElm)
+	grid.cleanVideo = function(videoElm)
 	{
 		if (!$(videoElm).hasClass('ytg-cleaned'))
 		{
@@ -132,13 +132,13 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			$(videoElm).find('.yt-lockup-meta-info').append('<li><p>'+views+'</p></li>');
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
 
-			subscriptions.addMarkWatchedBtn(videoElm);
+			grid.addMarkWatchedBtn(videoElm);
 
 			$(videoElm).addClass('ytg-cleaned');
 		}
 	};
 
-	subscriptions.addMarkWatchedBtn = function(videoElm)
+	grid.addMarkWatchedBtn = function(videoElm)
 	{
 		// Set up the mark as watched button. 
 		var button = $(videoElm).find('.addto-watch-later-button').clone();
@@ -150,7 +150,7 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		$(videoElm).find('.contains-addto').append(button);
 	};
 
-	subscriptions.timedVideoMark = function(ms, loop)
+	grid.timedVideoMark = function(ms, loop)
 	{
 		setTimeout(function()
 		{
@@ -158,39 +158,39 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 			YTG.platform.getStorageItem('watchHistory', function(data)
 			{
 				YTG.history.setHistory(data.watchHistory);
-				YTG.subscriptions.markVideos();
+				YTG.grid.markVideos();
 
 				if (loop)
 				{
-					subscriptions.timedVideoMark(ms, loop);
+					grid.timedVideoMark(ms, loop);
 				}
 			});
 		}, ms);
 	};
 
-	subscriptions.setHideVideos = function(hideVideos)
+	grid.setHideVideos = function(hideVideos)
 	{
-		subscriptions.hideVideos = hideVideos || false;
+		grid.hideVideos = hideVideos || false;
 	};
 
-	subscriptions.toggleVideos = function()
+	grid.toggleVideos = function()
 	{
 		if ($(this).hasClass('yt-uix-button-toggled'))
 		{
 			return false;
 		}
 
-		subscriptions.hideVideos = !subscriptions.hideVideos;
-		subscriptions.setViewToggle();
+		grid.hideVideos = !grid.hideVideos;
+		grid.setViewToggle();
 
-		YTG.platform.setStorageItem('hideVideos', subscriptions.hideVideos);
+		YTG.platform.setStorageItem('hideVideos', grid.hideVideos);
 	};
 
-	subscriptions.setViewToggle = function()
+	grid.setViewToggle = function()
 	{
 		$('#channel-navigation-menu .view-toggle-button').removeClass('yt-uix-button-toggled');
 
-		if (subscriptions.hideVideos)
+		if (grid.hideVideos)
 		{
 			$('#hideVideos').addClass('yt-uix-button-toggled');
 			$('#page').addClass('ytg-hide-watched-videos');
@@ -202,5 +202,5 @@ YTG.subscriptions = (function (YTG, subscriptions) {
 		}
 	};
 
-	return subscriptions;
-}(YTG, YTG.subscriptions || {}));
+	return grid;
+}(YTG, YTG.grid || {}));

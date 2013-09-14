@@ -16,7 +16,7 @@
 		},
 		{
 			"matches": ["*://*.youtube.com/feed/subscriptions"],
-			"js": ["data/app/subscriptions.js"],
+			"js": ["data/app/grid.js"],
 			"css": ["data/assets/youtube.css"]
 		}
 	],
