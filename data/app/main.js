@@ -12,10 +12,12 @@ $(document).ready(function(){
 		{
 			YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
 		}
-
+		
 		// Are we on the subs page?
-		if (window.location.href.indexOf('/feed/subscriptions') !== -1)
+		if (YTG.grid.isGridable(window.location.href))
 		{
+			$('body').addClass('ytg-gridable');
+
 			// selector fun - yolo
 			$('#page').on('click', '.ytg-mark-watched:not(.watched .ytg-mark-watched)', YTG.history.toggleWatchedHandler);
 

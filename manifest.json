@@ -15,7 +15,7 @@
 			"js": ["data/assets/jquery.min.js", "data/app/platform.chrome.js", "data/app/history.js", "data/app/main.js"]
 		},
 		{
-			"matches": ["*://*.youtube.com/feed/subscriptions"],
+			"matches": ["*://*.youtube.com/feed/*"],
 			"js": ["data/app/grid.js"],
 			"css": ["data/assets/youtube.css"]
 		}

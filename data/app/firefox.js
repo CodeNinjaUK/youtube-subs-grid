@@ -7,7 +7,7 @@ var storageObject = require("sdk/simple-storage");
 // It will run a script whenever a ".org" URL is loaded
 // The script replaces the page contents with a message
 pageMod.PageMod({
-	include: ["http://www.youtube.com/feed/subscriptions", "https://www.youtube.com/feed/subscriptions"],
+	include: ["http://www.youtube.com/feed/"],
 	contentStyleFile: self.data.url("assets/youtube.css")
 });
 

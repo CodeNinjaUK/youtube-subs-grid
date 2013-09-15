@@ -202,5 +202,30 @@ YTG.grid = (function (YTG, grid) {
 		}
 	};
 
+	// Is a subs page, a collection page, 
+	// watch history or watch later page
+	// and not an activty page.
+	grid.isGridable = function(url)
+	{
+		var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
+
+		// First off, we never ever (yet) want to 
+		// gridify an activity page.
+		if (url.indexOf('/activity') !== -1)
+		{
+			return false;
+		}
+
+		var gridable = gridablePages.some(function(gridCheck)
+		{
+			if (url.indexOf(gridCheck) >= 0)
+			{
+				return true;
+			}
+		});
+
+		return gridable;
+	};
+
 	return grid;
 }(YTG, YTG.grid || {}));
