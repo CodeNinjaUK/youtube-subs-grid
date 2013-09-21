@@ -106,6 +106,8 @@
     line-height: 15px !important;
 }
 
+.ytg-gridable .yt-lockup-meta-info>li { display: block !important; }
+
 /* Remove the overflow so that the video action menu doesn't clip */
 .ytg-gridable .feed-header { height: 32px !important; }
 .ytg-gridable .feed-header.collection { height: 100px !important; }
