@@ -123,14 +123,15 @@ YTG.grid = (function (YTG, grid) {
 		if (!$(videoElm).hasClass('ytg-cleaned'))
 		{
 			// Fix formatting
-			var uploadString = $(videoElm).find('.feed-item-time').text() + ' by ' + $(videoElm).find('.feed-item-owner').html();
+			var metaInfo = $(videoElm).find('.yt-lockup-meta-info');
+			var uploadString = metaInfo.find('li:first').text() + ' by ' + $(videoElm).find('.feed-item-owner').html();
 
 			$(videoElm).find('.feed-item-header').remove();
 
 			var views = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-views');
 
-			$(videoElm).find('.yt-lockup-meta-info').html('<li><p>'+uploadString+'</p></li>');
-			$(videoElm).find('.yt-lockup-meta-info').append('<li><p>'+views+'</p></li>');
+			metaInfo.html('<li><p>'+uploadString+'</p></li>');
+			metaInfo.append('<li><p>'+views+'</p></li>');
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
 
 			grid.addMarkWatchedBtn(videoElm);
