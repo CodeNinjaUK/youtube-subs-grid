@@ -122,6 +122,7 @@ YTG.grid = (function (YTG, grid) {
 	{
 		if (!$(videoElm).hasClass('ytg-cleaned'))
 		{
+			// Fix formatting
 			var uploadString = $(videoElm).find('.feed-item-time').text() + ' by ' + $(videoElm).find('.feed-item-owner').html();
 
 			$(videoElm).find('.feed-item-header').remove();
@@ -133,6 +134,14 @@ YTG.grid = (function (YTG, grid) {
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
 
 			grid.addMarkWatchedBtn(videoElm);
+
+			// Fix the thumbnail if its broken. 
+			var videoThumb = $(videoElm).find('.video-thumb img[alt="Thumbnail"]');
+			
+			if (videoThumb.attr('src').indexOf('pixel') !== -1)
+			{
+				videoThumb.attr('src', videoThumb.attr('data-thumb'));
+			}
 
 			$(videoElm).addClass('ytg-cleaned');
 		}
