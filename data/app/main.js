@@ -12,7 +12,7 @@ $(document).ready(function(){
 		{
 			YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
 		}
-		
+
 		// Are we on the subs page?
 		if (YTG.grid.isGridable(window.location.href))
 		{
