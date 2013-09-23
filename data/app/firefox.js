@@ -11,6 +11,12 @@ pageMod.PageMod({
 	contentStyleFile: self.data.url("assets/youtube.css")
 });
 
+// Include the grid-only CSS as well so we don't get the flicker.
+pageMod.PageMod({
+	include: ["http://www.youtube.com/feed/subscriptions", "https://www.youtube.com/feed/subscriptions"],
+	contentStyleFile: self.data.url("assets/youtube.css")
+});
+
 var workers = [];
 
 pageMod.PageMod({

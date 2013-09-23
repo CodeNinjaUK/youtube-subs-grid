@@ -50,7 +50,9 @@
     padding: 0 !important;
 }
 
-.ytg-gridable .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail {
+.ytg-gridable .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail,
+.ytg-gridable .yt-lockup2.yt-lockup2-tile .yt-lockup2-thumbnail 
+{
     float: none !important;
    /* margin-bottom: 17px !important;*/
 }
@@ -60,7 +62,9 @@
  !important;
 }
 
-.ytg-gridable .yt-lockup-description {
+.ytg-gridable .yt-lockup-description,
+.ytg-gridable .yt-lockup2-description 
+{
     display: none !important;
 }
 
@@ -93,20 +97,33 @@
    display:none;
 }
 
-.ytg-gridable .yt-lockup-meta, .ytg-gridable .yt-lockup-description, .ytg-gridable .yt-lockup-badges {
+.ytg-gridable .yt-lockup-meta, 
+.ytg-gridable .yt-lockup-description, 
+.ytg-gridable .yt-lockup-badges,
+.ytg-gridable .yt-lockup2-meta, 
+.ytg-gridable .yt-lockup2-description, 
+.ytg-gridable .yt-lockup2-badges 
+{
     float: left !important;
 }
 
-.ytg-gridable .yt-lockup-tile .yt-lockup-meta-info>li:before
+.ytg-gridable .yt-lockup-tile .yt-lockup-meta-info>li:before,
+.ytg-gridable .yt-lockup2-tile .yt-lockup2-meta-info>li:before
 {
     content: none !important;
 }
 
-.ytg-gridable .yt-lockup-meta-info>li {
+.ytg-gridable .yt-lockup-meta-info>li,
+.ytg-gridable .yt-lockup2-meta-info>li
+{
     line-height: 15px !important;
 }
 
-.ytg-gridable .yt-lockup-meta-info>li { display: block !important; }
+.ytg-gridable .yt-lockup-meta-info>li,
+.ytg-gridable .yt-lockup2-meta-info>li 
+{ 
+    display: block !important;
+}
 
 /* Remove the overflow so that the video action menu doesn't clip */
 .ytg-gridable .feed-header { height: 32px !important; }
