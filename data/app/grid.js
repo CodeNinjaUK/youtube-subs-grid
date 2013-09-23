@@ -58,8 +58,8 @@ YTG.grid = (function (YTG, grid) {
 		YTG.history.massAddToHistory(videoArray);
 	};
 
-	// Get all videos marked as watched on the 
-	// YT side of things, remove them from our 
+	// Get all videos marked as watched on the
+	// YT side of things, remove them from our
 	// internal history
 	grid.markYTVideos = function()
 	{
@@ -136,10 +136,10 @@ YTG.grid = (function (YTG, grid) {
 
 			grid.addMarkWatchedBtn(videoElm);
 
-			// Fix the thumbnail if its broken. 
+			// Fix the thumbnail if its broken.
 			var videoThumb = $(videoElm).find('.video-thumb img[alt="Thumbnail"]');
-			
-			if (videoThumb.attr('src').indexOf('pixel') !== -1)
+
+			if (videoThumb.attr('src') && videoThumb.attr('src').indexOf('pixel') !== -1)
 			{
 				videoThumb.attr('src', videoThumb.attr('data-thumb'));
 			}
@@ -150,7 +150,7 @@ YTG.grid = (function (YTG, grid) {
 
 	grid.addMarkWatchedBtn = function(videoElm)
 	{
-		// Set up the mark as watched button. 
+		// Set up the mark as watched button.
 		var button = $(videoElm).find('.addto-watch-later-button').clone();
 
 		button.removeClass('addto-watch-later-button');
@@ -212,14 +212,14 @@ YTG.grid = (function (YTG, grid) {
 		}
 	};
 
-	// Is a subs page, a collection page, 
+	// Is a subs page, a collection page,
 	// watch history or watch later page
 	// and not an activty page.
 	grid.isGridable = function(url)
 	{
 		var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
 
-		// First off, we never ever (yet) want to 
+		// First off, we never ever (yet) want to
 		// gridify an activity page.
 		if (url.indexOf('/activity') !== -1)
 		{
