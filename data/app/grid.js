@@ -20,7 +20,7 @@ YTG.grid = (function (YTG, grid) {
 		YTG.grid.timedVideoMark(10000, true);
 
 
-		$('.feed-list-item').on('mousedown', function(e)
+		$('.feed-item-container').on('mousedown', function(e)
 		{
 			// We do this beause we can't directly trap
 			// new tab clicks - this will make sure if someone
@@ -45,7 +45,7 @@ YTG.grid = (function (YTG, grid) {
 
 	grid.markAllVisibleVideos = function()
 	{
-		var videos = $('.feed-list-item');
+		var videos = $('.feed-item-container');
 
 		var videoArray = [];
 		videos.each(function(idx, video)
@@ -75,7 +75,7 @@ YTG.grid = (function (YTG, grid) {
 
 	grid.markVideos = function()
 	{
-		var videos = $('.feed-list-item');
+		var videos = $('.feed-item-container');
 
 		videos.each(function(idx, video)
 		{
@@ -92,7 +92,7 @@ YTG.grid = (function (YTG, grid) {
 		if (!videoLinkElm.hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
 		{
 			videoLinkElm.addClass('ytg-watched');
-			videoLinkElm.prepend('<div class="watched-message">WATCHED</div>');
+			videoLinkElm.prepend('<div class="watched-badge">WATCHED</div>');
 			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
 		}
 		else if(videoLinkElm.hasClass('ytg-watched') && !YTG.history.videoIsInHistory(videoId))
@@ -110,11 +110,11 @@ YTG.grid = (function (YTG, grid) {
 
 		if (videoLinkElm.hasClass('ytg-watched') || videoLinkElm.hasClass('watched'))
 		{
-			videoLinkElm.parents('.feed-list-item').addClass('ytg-contains-watched');
+			videoLinkElm.parents('.feed-item-container').addClass('ytg-contains-watched');
 		}
 		else
 		{
-			videoLinkElm.parents('.feed-list-item').removeClass('ytg-contains-watched');
+			videoLinkElm.parents('.feed-item-container').removeClass('ytg-contains-watched');
 		}
 	};
 

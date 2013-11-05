@@ -35,7 +35,9 @@ button.ytg-mark-watched img {
 
 .ytg-hide-watched-videos .ytg-contains-watched { display: none; }
 
-.ytg-watched .video-thumb {opacity:.4;filter:alpha(opacity=40)}
+.ytg-watched .video-thumb {opacity:.7; filter: alpha(opacity=70) }
+.ytg-watched .watched-badge { opacity: 1; filter: alpha(opacity=100) }
+
 
 a.feed-author-bubble.yt-uix-sessionlink {
     display: none !important;
@@ -51,7 +53,7 @@ div.feed-item-main {
 }
 
 .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail,
-.yt-lockup2.yt-lockup2-tile .yt-lockup2-thumbnail 
+.yt-lockup2.yt-lockup2-tile .yt-lockup2-thumbnail
 {
     float: none !important;
    /* margin-bottom: 17px !important;*/
@@ -63,12 +65,13 @@ div.feed-item-main {
 }
 
 .yt-lockup-description,
-.yt-lockup2-description 
+.yt-lockup2-description
 {
     display: none !important;
 }
 
-.feed-list-item {
+
+.feed-list-item, .feed-item-container {
     float: left !important;
     width: 165px !important;
     height: 195px !important;
@@ -97,12 +100,12 @@ page {
    display:none;
 }
 
-.yt-lockup-meta, 
-.yt-lockup-description, 
+.yt-lockup-meta,
+.yt-lockup-description,
 .yt-lockup-badges,
-.yt-lockup2-meta, 
-.yt-lockup2-description, 
-.yt-lockup2-badges 
+.yt-lockup2-meta,
+.yt-lockup2-description,
+.yt-lockup2-badges
 {
     float: left !important;
 }
@@ -120,8 +123,8 @@ page {
 }
 
 .yt-lockup-meta-info>li,
-.yt-lockup2-meta-info>li 
-{ 
+.yt-lockup2-meta-info>li
+{
     display: block !important;
 }
 
