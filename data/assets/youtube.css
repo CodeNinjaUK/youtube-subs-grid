@@ -130,3 +130,7 @@
 .ytg-gridable .feed-header { height: 32px !important; }
 .ytg-gridable .feed-header.collection { height: 100px !important; }
 .ytg-gridable .branded-page-v2-primary-col { overflow: visible !important; }
+
+/* Badges */
+.ytg-gridable .ytg-views { float: left;}
+.ytg-gridable .item-badge-line { float: right; }

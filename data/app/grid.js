@@ -123,15 +123,20 @@ YTG.grid = (function (YTG, grid) {
 		if (!$(videoElm).hasClass('ytg-cleaned'))
 		{
 			// Fix formatting
-			var metaInfo = $(videoElm).find('.yt-lockup-meta-info');
-			var uploadString = metaInfo.find('li:first').text() + ' by ' + $(videoElm).find('.feed-item-owner').html();
+			var metaInfo       = $(videoElm).find('.yt-lockup-meta-info');
+			var uploadUserLink = $(videoElm).find('.feed-author-bubble').attr('href');
+			var uploadString   = metaInfo.find('li:first').text() + ' by <a href="'+uploadUserLink+'">' + $(videoElm).find('.feed-author-bubble img').attr('alt')+'</a>';
 
 			$(videoElm).find('.feed-item-header').remove();
 
-			var views = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-views');
+			var views = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-views') || '';
+			var badges = $(videoElm).find('.yt-lockup-badges').html() || '';
+
+
+			$(videoElm).find('.item-badge-line').remove();
 
 			metaInfo.html('<li><p>'+uploadString+'</p></li>');
-			metaInfo.append('<li><p>'+views+'</p></li>');
+			metaInfo.append('<li><p class="ytg-views">'+views+'</p>'+badges+'</li>');
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
 
 			grid.addMarkWatchedBtn(videoElm);
