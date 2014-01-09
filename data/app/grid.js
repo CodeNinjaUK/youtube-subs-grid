@@ -125,7 +125,7 @@ YTG.grid = (function (YTG, grid) {
 			// Fix formatting
 			var metaInfo       = $(videoElm).find('.yt-lockup-meta-info');
 			var uploadUserLink = $(videoElm).find('.feed-author-bubble').attr('href');
-			var uploadString   = metaInfo.find('li:first').text() + ' by <a href="'+uploadUserLink+'">' + $(videoElm).find('.feed-author-bubble img').attr('alt')+'</a>';
+			var uploadString   = metaInfo.find('li:first').text() + ' by <a class="ytg-channel-link" href="'+uploadUserLink+'">' + $(videoElm).find('.feed-author-bubble img').attr('alt')+'</a>';
 
 			$(videoElm).find('.feed-item-header').remove();
 
