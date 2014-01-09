@@ -135,4 +135,4 @@ page {
 
 /* Badges */
 .ytg-views { float: left;}
-.item-badge-line { float: right; }
+.item-badge-line { float: right; margin-top: 1px; }

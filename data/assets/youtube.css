@@ -133,4 +133,4 @@
 
 /* Badges */
 .ytg-gridable .ytg-views { float: left;}
-.ytg-gridable .item-badge-line { float: right; }
+.ytg-gridable .item-badge-line { float: right; margin-top:1px;}
