@@ -1,6 +1,6 @@
 {
 	"name": "Youtube Subscriptions Grid",
-	"version": "1.7",
+	"version": "1.8",
 	"manifest_version": 2,
 	"minimum_chrome_version" : "17",
 	"description": "Transforms Youtube's broken feed subscription page and restore it to it's former grid glory.",
@@ -12,16 +12,8 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*.youtube.com/*"],
-			"js": ["data/assets/jquery.min.js", "data/app/platform.chrome.js", "data/app/history.js", "data/app/main.js"]
-		},
-		{
-			"matches": ["*://*.youtube.com/feed/*"],
-			"js": ["data/app/grid.js"],
+			"js": ["data/assets/jquery.min.js", "data/app/platform.chrome.js", "data/app/history.js", "data/app/main.js", "data/app/grid.js", "data/app/ytg.js"],
 			"css": ["data/assets/youtube.css"]
-		},
-		{
-			"matches": ["*://*.youtube.com/feed/subscriptions"],
-			"css": ["data/assets/grid.css"]
 		}
 	],
 	"permissions": [

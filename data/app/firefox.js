@@ -3,20 +3,6 @@ var pageMod = require("sdk/page-mod");
 var self = require("sdk/self");
 var storageObject = require("sdk/simple-storage");
 
-// Create a page mod
-// It will run a script whenever a ".org" URL is loaded
-// The script replaces the page contents with a message
-pageMod.PageMod({
-	include: ["http://www.youtube.com/feed/*", "https://www.youtube.com/feed/*"],
-	contentStyleFile: self.data.url("assets/youtube.css")
-});
-
-// Include the grid-only CSS as well so we don't get the flicker.
-pageMod.PageMod({
-	include: ["http://www.youtube.com/feed/subscriptions", "https://www.youtube.com/feed/subscriptions"],
-	contentStyleFile: self.data.url("assets/youtube.css")
-});
-
 var workers = [];
 
 pageMod.PageMod({
@@ -26,8 +12,10 @@ pageMod.PageMod({
 		self.data.url("app/platform.firefox.js"),
 		self.data.url("app/grid.js"),
 		self.data.url("app/history.js"),
+		self.data.url("app/ytg.js"),
 		self.data.url("app/main.js")
 	],
+	contentStyleFile: self.data.url("assets/youtube.css"),
 	'contentScriptWhen' : 'start',
 	onAttach: function(worker)
 	{

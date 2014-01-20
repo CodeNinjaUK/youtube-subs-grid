@@ -169,17 +169,20 @@ YTG.grid = (function (YTG, grid) {
 	{
 		setTimeout(function()
 		{
-			// Refetch the watch history in case it changed
-			YTG.platform.getStorageItem('watchHistory', function(data)
+			if ($('body').hasClass('ytg-gridable'))
 			{
-				YTG.history.setHistory(data.watchHistory);
-				YTG.grid.markVideos();
-
-				if (loop)
+				// Refetch the watch history in case it changed
+				YTG.platform.getStorageItem('watchHistory', function(data)
 				{
-					grid.timedVideoMark(ms, loop);
-				}
-			});
+					YTG.history.setHistory(data.watchHistory);
+					YTG.grid.markVideos();
+
+					if (loop)
+					{
+						grid.timedVideoMark(ms, loop);
+					}
+				});
+			}
 		}, ms);
 	};
 

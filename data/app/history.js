@@ -3,11 +3,11 @@ var YTG = YTG || {};
 YTG.history = (function (YTG, history) {
 
 	// We don't have unlimted storage
-	// so there needs to be a limit on 
+	// so there needs to be a limit on
 	// how big this history is.
 	history.maxVideoHistoryCount = 200;
-	
-	
+
+
 	history.setHistory = function(watchHistory)
 	{
 		history.watchHistory = watchHistory || [];
@@ -54,7 +54,7 @@ YTG.history = (function (YTG, history) {
 
 	history.updateSubscriptions = function()
 	{
-		if (YTG.grid)
+		if (YTG.grid && YTG.grid.isGridable(window.location.href))
 		{
 			YTG.grid.markVideos();
 		}
