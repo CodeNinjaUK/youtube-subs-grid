@@ -1,3 +1,13 @@
+.ytg-gridable.site-center-aligned #content {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+}
+
+.ytg-gridable.site-center-aligned .yt-card {
+    margin: 0;
+}
+
 .ytg-gridable button.ytg-mark-watched {
     right:0 !important;
     left: 2px !important;
@@ -58,10 +68,9 @@
    /* margin-bottom: 17px !important;*/
 }
 
-.ytg-gridable #page {
-    width: 97.925%
- !important;
-}
+/*.ytg-gridable #page {
+    width: 97.925% !important;
+}*/
 
 .ytg-gridable .yt-lockup-description,
 .ytg-gridable .yt-lockup2-description
@@ -71,10 +80,13 @@
 
 .ytg-gridable .feed-list-item, .ytg-gridable .feed-item-container {
     float: left !important;
-    width: 165px !important;
+    width: 185px !important;
     height: 195px !important;
     border: 0 !important;
-    margin-top: 10px !important;
+    margin-top: 15px !important;
+    margin-right: 0px !important;
+    margin-left:15px !important;
+    padding: 0px !important;
 }
 
 .ytg-gridable .feed-item-container .feed-item-main {
