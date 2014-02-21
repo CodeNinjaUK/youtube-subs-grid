@@ -91,7 +91,7 @@ YTG.history = (function (YTG, history) {
 
 	history.toggleWatchedHandler = function(e)
 	{
-		var videoId = $(this).parents('[data-context-item-id]').attr('data-context-item-id');
+		var videoId = $(this).attr('data-video-ids');
 
 		if (history.videoIsInHistory(videoId))
 		{

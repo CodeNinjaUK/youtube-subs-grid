@@ -9,7 +9,7 @@ YTG = (function (self) {
 			YTG.history.setHistory(data.watchHistory);
 
 			// Record all links leading to videos.
-			$('#page').on('click', '[data-context-item-type="video"] a:not(.ytg-channel-link)', YTG.history.addToHistoryHandler);
+			$('#page').on('click', '.feed-item-container a:not(.ytg-channel-link)', YTG.history.addToHistoryHandler);
 
 			// Is this a video watch page? Make sure we store that in the history
 			// in case the user came from an external source.

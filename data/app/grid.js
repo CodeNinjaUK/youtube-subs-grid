@@ -50,7 +50,7 @@ YTG.grid = (function (YTG, grid) {
 		var videoArray = [];
 		videos.each(function(idx, video)
 		{
-			var videoId = $(video).find('[data-context-item-type="video"]').attr('data-context-item-id');
+			var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
 
 			videoArray.push(videoId);
 		});
@@ -66,7 +66,7 @@ YTG.grid = (function (YTG, grid) {
 		var videos = [];
 		$('.watched').each(function(idx, elm)
 		{
-			var videoId = $(elm).parents('[data-context-item-type="video"]').attr('data-context-item-id');
+			var videoId = $(elm).parents('.feed-item-container').find('.addto-watch-later-button').attr('data-video-ids');
 			videos.push(videoId);
 		});
 
@@ -86,7 +86,8 @@ YTG.grid = (function (YTG, grid) {
 
 	grid.markVideo = function(videoElm)
 	{
-		var videoId = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-id');
+		var videoId = $(videoElm).find('.addto-watch-later-button').attr('data-video-ids');
+
 		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a.ux-thumb-wrap');
 
 		if (!videoLinkElm.hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
@@ -129,15 +130,19 @@ YTG.grid = (function (YTG, grid) {
 
 			$(videoElm).find('.feed-item-header').remove();
 
-			var views = $(videoElm).find('[data-context-item-type="video"]').attr('data-context-item-views') || '';
+			var views = $(videoElm).find('.yt-lockup-meta-info li:contains("views")').text()
 			var badges = $(videoElm).find('.yt-lockup-badges').html() || '';
-
 
 			$(videoElm).find('.item-badge-line').remove();
 
 			metaInfo.html('<li><p>'+uploadString+'</p></li>');
 			metaInfo.append('<li><p class="ytg-views">'+views+'</p>'+badges+'</li>');
 			$(videoElm).find('.yt-user-name-icon-verified').remove();
+
+			if ($(videoElm).find('.yt-badge').text() == 'UPCOMING EVENT')
+			{
+				$(videoElm).find('.yt-badge').parents('.item-badge-line').remove();
+			}
 
 			grid.addMarkWatchedBtn(videoElm);
 
