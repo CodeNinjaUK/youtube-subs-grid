@@ -147,12 +147,10 @@ YTG.grid = (function (YTG, grid) {
 			grid.addMarkWatchedBtn(videoElm);
 
 			// Fix the thumbnail if its broken.
-			var videoThumb = $(videoElm).find('.video-thumb img[alt="Thumbnail"]');
-
-			if (videoThumb.attr('src') && videoThumb.attr('src').indexOf('pixel') !== -1)
-			{
-				videoThumb.attr('src', videoThumb.attr('data-thumb'));
-			}
+			$('.yt-thumb-clip img[src*="pixel"]').each(function(idx, elm) 
+			{ 
+				$(this).attr('src', $(this).attr('data-thumb')); 
+			});
 
 			$(videoElm).addClass('ytg-cleaned');
 		}
