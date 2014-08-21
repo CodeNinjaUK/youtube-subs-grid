@@ -100,6 +100,8 @@ page {
    display:none;
 }
 
+.branded-page-module-title { display: none; }
+
 .yt-lockup-meta,
 .yt-lockup-description,
 .yt-lockup-badges,

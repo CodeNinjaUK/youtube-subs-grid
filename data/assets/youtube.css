@@ -61,6 +61,8 @@
     padding: 0 !important;
 }
 
+.ytg-gridable .shelf-item .branded-page-module-title { display: none !important; }
+
 .ytg-gridable .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail,
 .ytg-gridable .yt-lockup2.yt-lockup2-tile .yt-lockup2-thumbnail
 {
@@ -80,12 +82,12 @@
 
 .ytg-gridable .feed-list-item, .ytg-gridable .feed-item-container {
     float: left !important;
-    width: 185px !important;
-    height: 195px !important;
+    width: 196px !important;
+    height: 205px !important;
     border: 0 !important;
     margin-top: 15px !important;
     margin-right: 0px !important;
-    margin-left:15px !important;
+    margin-left:10px !important;
     padding: 0px !important;
 }
 
@@ -130,12 +132,9 @@
 .ytg-gridable .yt-lockup2-meta-info>li
 {
     line-height: 15px !important;
-}
-
-.ytg-gridable .yt-lockup-meta-info>li,
-.ytg-gridable .yt-lockup2-meta-info>li
-{
     display: block !important;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 /* Remove the overflow so that the video action menu doesn't clip */
