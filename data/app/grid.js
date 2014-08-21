@@ -6,29 +6,10 @@ YTG.grid = (function (YTG, grid) {
 		YTG.grid.markYTVideos();
 		YTG.grid.markVideos();
 
-		// YT loads in more videos on big screens.
-		// We wait a few seconds so we can mark those videos too.
-		//
-		//  I'd much prefer to bind to an AJAX event if
-		//  possible.
-		//
-		YTG.grid.timedVideoMark(2000);
 
-		// Drop in to a longer monitoring loop
-		// to mark videos watched while away
-		// from the page as watched.
-		YTG.grid.timedVideoMark(10000, true);
+		// Monitor the page contstant for changes
+		YTG.grid.timedVideoMark(500, true);
 
-
-		$('.feed-item-container').on('mousedown', function(e)
-		{
-			// We do this beause we can't directly trap
-			// new tab clicks - this will make sure if someone
-			// opens a video in a new tab it'll be marked
-			// pretty quickly so we don't have to wait
-			// for the main mark loop.
-			YTG.grid.timedVideoMark(2000);
-		});
 
 		// Append our show/hide toggle
 		$('#channel-navigation-menu').append('<li><p> Watched videos: <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required"><button aria-label="Show watched videos" type="button" class="start view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" data-button-toggle="true" role="button" id="showVideos"><span class="yt-uix-button-content">Show</span></button></span><span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required"><button aria-label="Hide watched videos" type="button" class="end view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" data-button-toggle="true" role="button" id="hideVideos"><span class="yt-uix-button-content">Hide</span></button></p></li>');
@@ -41,6 +22,16 @@ YTG.grid = (function (YTG, grid) {
 		$('#channel-navigation-menu').append('<li><p><button aria-label="Show watched videos" type="button" class="yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" role="button" id="markAllVideos"><span class="yt-uix-button-content">Mark all videos as watched</span></button></p></li>');
 
 		$('#channel-navigation-menu').on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
+
+
+		// Load more videos, then load some more
+		$('.load-more-button').trigger('click');
+
+		setTimeout(function()
+		{
+			$('.load-more-button').trigger('click');
+		}, 2000);
+
 	};
 
 	grid.markAllVisibleVideos = function()
