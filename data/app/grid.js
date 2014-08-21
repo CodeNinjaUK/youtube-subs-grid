@@ -116,9 +116,13 @@ YTG.grid = (function (YTG, grid) {
 		{
 			// Fix formatting
 			var metaInfo       = $(videoElm).find('.yt-lockup-meta-info');
-			var uploadUserLink = $(videoElm).find('.branded-page-module-title-link').attr('href');
-			var uploadString   = 'By <a class="ytg-channel-link" href="'+uploadUserLink+'">' + $(videoElm).find('.branded-page-module-title-text').text()+'</a>';
 
+			if ($('.individual-feed').length)
+			{
+				var uploadUserLink = $(videoElm).find('.feed-author-bubble').attr('href');
+				var uploadString   = metaInfo.find('li:first').text() + ' by <a class="ytg-channel-link" href="'+uploadUserLink+'">' + $(videoElm).find('.feed-author-bubble img').attr('alt')+'</a>';
+			}
+			
 			$(videoElm).find('.feed-item-header').remove();
 
 			var views = $(videoElm).find('.yt-lockup-meta-info li:contains("views")').text()
@@ -126,9 +130,13 @@ YTG.grid = (function (YTG, grid) {
 
 			$(videoElm).find('.item-badge-line').remove();
 
-			//metaInfo.html('<li><p>'+uploadString+'</p></li>');
-			//metaInfo.append('<li><p class="ytg-views">'+views+'</p></li>');
-			$(videoElm).find('.yt-user-name-icon-verified').remove();
+			if ($('.individual-feed').length)
+			{
+				metaInfo.html('<li><p>'+uploadString+'</p></li>');
+				metaInfo.append('<li><p class="ytg-views">'+views+'</p>'+badges+'</li>');
+				$(videoElm).find('.yt-user-name-icon-verified').remove();
+			}
+
 
 			if ($(videoElm).find('.yt-badge').text() == 'UPCOMING EVENT')
 			{
