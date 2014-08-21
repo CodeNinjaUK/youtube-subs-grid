@@ -67,5 +67,13 @@ YTG = (function (self) {
 		self.currentPage = url;
 	};
 
+	self.fireEvent = function(elem, eventType)
+	{
+		var evObj = document.createEvent('Events');
+		evObj.initEvent(eventType, true, false);
+
+		elem.dispatchEvent(evObj);
+	}
+
 	return self;
 }(YTG || {}));

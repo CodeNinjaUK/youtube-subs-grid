@@ -24,15 +24,19 @@ YTG.grid = (function (YTG, grid) {
 		$('#channel-navigation-menu').on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
 
 
-		// Load more videos, then load some more
-		$('.load-more-button').trigger('click');
+		grid.loadMoreVideos();
+	};
 
+	grid.loadMoreVideos = function()
+	{
+		// Load more videos, then load some more
+		// Note: don't use jquery here because it messes with the event dispatch stuff.
+		YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
 		setTimeout(function()
 		{
-			$('.load-more-button').trigger('click');
+			YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
 		}, 2000);
-
-	};
+	}
 
 	grid.markAllVisibleVideos = function()
 	{
@@ -122,7 +126,7 @@ YTG.grid = (function (YTG, grid) {
 				var uploadUserLink = $(videoElm).find('.feed-author-bubble').attr('href');
 				var uploadString   = metaInfo.find('li:first').text() + ' by <a class="ytg-channel-link" href="'+uploadUserLink+'">' + $(videoElm).find('.feed-author-bubble img').attr('alt')+'</a>';
 			}
-			
+
 			$(videoElm).find('.feed-item-header').remove();
 
 			var views = $(videoElm).find('.yt-lockup-meta-info li:contains("views")').text()
@@ -146,9 +150,9 @@ YTG.grid = (function (YTG, grid) {
 			grid.addMarkWatchedBtn(videoElm);
 
 			// Fix the thumbnail if its broken.
-			$('.yt-thumb-clip img[src*="pixel"]').each(function(idx, elm) 
-			{ 
-				$(this).attr('src', $(this).attr('data-thumb')); 
+			$('.yt-thumb-clip img[src*="pixel"]').each(function(idx, elm)
+			{
+				$(this).attr('src', $(this).attr('data-thumb'));
 			});
 
 			$(videoElm).addClass('ytg-cleaned');
