@@ -13,17 +13,22 @@
     left: 2px !important;
 }
 
-.ytg-gridable button.ytg-mark-watched img {
+.ytg-gridable button.ytg-mark-watched .yt-uix-button-icon {
     background: no-repeat url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfla-Zaz2.png) -83px -298px !important;
     height: 13px !important;
     width: 13px !important;
 }
-
-.ytg-gridable .ytg-watched button.ytg-mark-watched img {
+.ytg-gridable .ytg-watched button.ytg-mark-watched .yt-uix-button-icon {
     background: url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfla-Zaz2.png) -202px -337px no-repeat !important;
     width: 21px !important;
     height: 21px !important;
 }
+.ytg-gridable .watched button.ytg-mark-watched .yt-uix-button-icon {
+    background: url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfla-Zaz2.png) -38px 1px no-repeat !important;
+    width: 21px !important;
+    height: 21px !important;
+}
+
 
 .ytg-gridable .ytg-watched button.yt-uix-button-default.ytg-mark-watched {
     background-image: -moz-linear-gradient(top,#74a446 0,#4d7730 100%) !important;
@@ -37,11 +42,6 @@
     border: 0 !important;
 }
 
-.ytg-gridable .watched button.ytg-mark-watched img {
-    background: url(http://s.ytimg.com/yts/imgbin/www-hitchhiker-vfla-Zaz2.png) -38px 1px no-repeat !important;
-    width: 21px !important;
-    height: 21px !important;
-}
 
 .ytg-gridable .ytg-hide-watched-videos .ytg-contains-watched { display: none; }
 
