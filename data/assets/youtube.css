@@ -16,6 +16,12 @@
     height: 21px !important;
     right:0 !important;
     left: 2px !important;
+    display:none;
+}
+
+.ytg-gridable .contains-addto:hover button.ytg-mark-watched
+{
+    display: block;
 }
 
 .ytg-gridable .ytg-watched button.ytg-mark-watched {
