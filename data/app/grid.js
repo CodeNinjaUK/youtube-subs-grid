@@ -85,26 +85,27 @@ YTG.grid = (function (YTG, grid) {
 
 		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a');
 
-		if (!videoLinkElm.hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
+        // Can't unmark these ones.
+        if (videoLinkElm.hasClass('watched'))
+        {
+            $(videoElm).addClass('watched');
+            $(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Cannot changed watched status');
+        }
+		else if (!$(videoElm).hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
 		{
-			videoLinkElm.addClass('ytg-watched');
+            $(videoElm).addClass('ytg-watched');
 			videoLinkElm.prepend('<div class="watched-badge">WATCHED</div>');
-			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
+			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
 		}
-		else if(videoLinkElm.hasClass('ytg-watched') && !YTG.history.videoIsInHistory(videoId))
+		else if($(videoElm).hasClass('ytg-watched') && !YTG.history.videoIsInHistory(videoId))
 		{
-			videoLinkElm.removeClass('ytg-watched');
-			videoLinkElm.find('.watched-message').remove();
-			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
+            $(videoElm).removeClass('ytg-watched');
+			$(videoElm).find('.watched-message').remove();
+			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
 		}
 
-		// Can't unmark these ones.
-		if (videoLinkElm.hasClass('watched'))
-		{
-			videoLinkElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Cannot changed watched status');
-		}
 
-		if (videoLinkElm.hasClass('ytg-watched') || videoLinkElm.hasClass('watched'))
+		if ($(videoElm).hasClass('ytg-watched') || $(videoElm).hasClass('watched'))
 		{
 			videoLinkElm.parents('.feed-item-container').addClass('ytg-contains-watched');
 		}
