@@ -83,7 +83,7 @@ YTG.grid = (function (YTG, grid) {
 	{
 		var videoId = $(videoElm).find('.addto-watch-later-button').attr('data-video-ids');
 
-		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a.ux-thumb-wrap');
+		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a');
 
 		if (!videoLinkElm.hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
 		{
