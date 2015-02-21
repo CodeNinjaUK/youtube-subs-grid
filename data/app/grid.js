@@ -165,7 +165,7 @@ YTG.grid = (function (YTG, grid) {
 		// Set up the mark as watched button.
 		var button = $(videoElm).find('.addto-watch-later-button').clone();
 
-		button.removeClass('addto-watch-later-button');
+		button.removeClass('addto-watch-later-button addto-button');
 		button.addClass('ytg-mark-watched');
 		button.attr('data-tooltip-text', 'Mark as watched');
 
