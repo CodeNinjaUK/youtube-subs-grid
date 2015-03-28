@@ -3,6 +3,8 @@ Youtube Subscriptions Grid
 
 A browser extension for Chrome an Firefox to fix Youtube's broken subscription feed page.
 
+To be kept up to date with the latest news & updates, follow [@subsgrid](https://twitter.com/subsgrid) on twitter. 
+
 ### Features include
 
 * Gridifcation of the youtube subscriptions page (/feed/subscriptions)
