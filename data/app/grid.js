@@ -105,7 +105,7 @@ YTG.grid = (function (YTG, grid) {
 		}
 
 
-		if ($(videoElm).hasClass('ytg-watched') || $(videoElm).hasClass('watched'))
+		if ($(videoElm).hasClass('ytg-watched') || $(videoElm).hasClass('watched') || $(videoElm).find('.watched').length)
 		{
 			videoLinkElm.parents('.feed-item-container').addClass('ytg-contains-watched');
 		}
