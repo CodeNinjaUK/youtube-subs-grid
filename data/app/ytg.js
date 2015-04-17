@@ -26,6 +26,7 @@ YTG = (function (self) {
 		if (!$('body').hasClass('ytg-gridable'))
 		{
 			$('body').addClass('ytg-gridable');
+			$('#content').fadeIn();
 
 			// selector fun - yolo
 			$('#page').on('click', '.ytg-mark-watched:not(.watched .ytg-mark-watched)', YTG.history.toggleWatchedHandler);

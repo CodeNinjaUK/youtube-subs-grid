@@ -1,3 +1,7 @@
+#content {
+    display: none;
+}
+
 button.ytg-mark-watched {
     right:0 !important;
     left: 2px !important;
