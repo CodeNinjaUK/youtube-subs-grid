@@ -26,6 +26,7 @@ YTG = (function (self) {
 		if (!$('body').hasClass('ytg-gridable'))
 		{
 			$('body').addClass('ytg-gridable');
+			
 			$('#content').fadeIn();
 
 			// selector fun - yolo
@@ -62,6 +63,8 @@ YTG = (function (self) {
 						window.clearInterval(loopId);
 					}
 				});
+			} else {
+				$('#content').fadeIn();
 			}
 		}
 
