@@ -51,6 +51,7 @@
 }
 
 .ytg-gridable .shelf-item .branded-page-module-title { display: none !important; }
+.ytg-gridable .shelf-item .shelf-title-table { display: none; !important; }
 
 .ytg-gridable .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail,
 .ytg-gridable .yt-lockup2.yt-lockup2-tile .yt-lockup2-thumbnail
@@ -101,15 +102,15 @@
    display:none;
 }
 
-.ytg-gridable .yt-lockup-meta,
-.ytg-gridable .yt-lockup-description,
-.ytg-gridable .yt-lockup-badges,
-.ytg-gridable .yt-lockup2-meta,
-.ytg-gridable .yt-lockup2-description,
-.ytg-gridable .yt-lockup2-badges
-{
-    float: left !important;
-}
+/*.ytg-gridable .yt-lockup-meta,*/
+/*.ytg-gridable .yt-lockup-description,*/
+/*.ytg-gridable .yt-lockup-badges,*/
+/*.ytg-gridable .yt-lockup2-meta,*/
+/*.ytg-gridable .yt-lockup2-description,*/
+/*.ytg-gridable .yt-lockup2-badges*/
+/*{*/
+    /*float: right !important;*/
+/*}*/
 
 .ytg-gridable .yt-lockup-tile .yt-lockup-meta-info>li:before,
 .ytg-gridable .yt-lockup2-tile .yt-lockup2-meta-info>li:before
