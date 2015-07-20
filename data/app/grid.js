@@ -234,6 +234,13 @@ YTG.grid = (function (YTG, grid) {
 	{
 		var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
 
+        // Are we seeing YT's grid layout? Bail out and don't touch the page for now
+        // need to see what we can do.
+        if ($('.yt-shelf-grid-item').length > 0)
+        {
+            return false;
+        }
+
 		// First off, we never ever (yet) want to
 		// gridify an activity page.
 		if (url.indexOf('/activity') !== -1)
