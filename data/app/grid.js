@@ -2,6 +2,7 @@ var YTG = YTG || {};
 
 YTG.grid = (function (YTG, grid) {
     grid.setup = function () {
+
         YTG.grid.markYTVideos();
         YTG.grid.markVideos();
 
@@ -48,6 +49,11 @@ YTG.grid = (function (YTG, grid) {
         grid.loadMoreVideos();
     };
 
+    grid.allVideos = function()
+    {
+        return $('.yt-shelf-grid-item');
+    };
+
     grid.loadMoreVideos = function () {
         // Load more videos, then load some more
         // Note: don't use jquery here because it messes with the event dispatch stuff.
@@ -58,10 +64,8 @@ YTG.grid = (function (YTG, grid) {
     }
 
     grid.markAllVisibleVideos = function () {
-        var videos = $('.feed-item-container');
-
         var videoArray = [];
-        videos.each(function (idx, video) {
+        grid.allVideos().each(function (idx, video) {
             var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
 
             videoArray.push(videoId);
@@ -84,9 +88,7 @@ YTG.grid = (function (YTG, grid) {
     };
 
     grid.markVideos = function () {
-        var videos = $('.yt-shelf-grid-item');
-
-        videos.each(function (idx, video) {
+        grid.allVideos().each(function (idx, video) {
             grid.cleanVideo(video);
             grid.markVideo(video);
         });
@@ -198,14 +200,7 @@ YTG.grid = (function (YTG, grid) {
     grid.isGridable = function (url) {
         var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
 
-        // Are we seeing YT's grid layout? Bail out and don't touch the page for now
-        // need to see what we can do.
-        //if ($('.yt-shelf-grid-item').length > 0)
-        //{
-        //    return false;
-        //}
-
-        if ($('.yt-shelf-grid-item').length === 0)
+        if (grid.allVideos().length === 0)
         {
             return false;
         }
