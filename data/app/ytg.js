@@ -22,7 +22,7 @@ YTG = (function (self) {
 
 	self.gridInit = function()
 	{
-		// Are we on the subs page and havn't previous successfully initiated the grid?
+		// Are we on the subs page and haven't previous successfully initiated the grid?
 		if (!$('body').hasClass('ytg-gridable'))
 		{
 			$('body').addClass('ytg-gridable');

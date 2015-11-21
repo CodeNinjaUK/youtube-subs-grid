@@ -1,263 +1,229 @@
 var YTG = YTG || {};
 
 YTG.grid = (function (YTG, grid) {
-	grid.setup = function()
-	{
-		YTG.grid.markYTVideos();
-		YTG.grid.markVideos();
+    grid.setup = function () {
+        YTG.grid.markYTVideos();
+        YTG.grid.markVideos();
 
+        // $('.shelf-content').first().html($('.yt-shelf-grid-item').detach())
 
-		// Monitor the page contstant for changes
-		YTG.grid.timedVideoMark(500, true);
+        // Monitor the page constantly for changes
+        YTG.grid.timedVideoMark(500, true);
 
+        // Append our show/hide toggle
+        var headerContainer = $('.shelf-title-table').first();
 
-		// Append our show/hide toggle
-		$('#channel-navigation-menu').append('<li><p> Watched videos: <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required"><button aria-label="Show watched videos" type="button" class="start view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" data-button-toggle="true" role="button" id="showVideos"><span class="yt-uix-button-content">Show</span></button></span><span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required"><button aria-label="Hide watched videos" type="button" class="end view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" data-button-toggle="true" role="button" id="hideVideos"><span class="yt-uix-button-content">Hide</span></button></p></li>');
+        headerContainer.prepend(`<div> <h2 class="branded-page-module-title"> Watched videos:
+                                        <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required">
+                                    <button
+                                        aria-label="Show watched videos" type="button"
+                                        class="start view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
+                                        data-button-toggle="true" role="button" id="showVideos">
+                                    <span class="yt-uix-button-content">Show</span>
+                                    </button>
+                                    </span>
+                                    <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required">
+                                    <button
+                                        aria-label="Hide watched videos"
+                                        type="button"
+                                        class="end view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
+                                        data-button-toggle="true" role="button" id="hideVideos">
+                                    <span class="yt-uix-button-content">Hide</span>
+                                    </button>
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <button aria-label="Show watched videos"
+                                        type="button"
+                                        class="yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
+                                        role="button"
+                                        id="markAllVideos">
+                                        <span class="yt-uix-button-content">Mark all videos as watched</span>
+                                    </button></h2>
+                                    </div>
+                                `);
+        headerContainer.on('click', '.view-toggle-button', YTG.grid.toggleVideos);
+        headerContainer.on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
+        YTG.grid.setViewToggle();
 
-		$('#channel-navigation-menu').on('click', '.view-toggle-button', YTG.grid.toggleVideos);
+        grid.loadMoreVideos();
+    };
 
-		YTG.grid.setViewToggle();
+    grid.loadMoreVideos = function () {
+        // Load more videos, then load some more
+        // Note: don't use jquery here because it messes with the event dispatch stuff.
+        YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
+        setTimeout(function () {
+            YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
+        }, 2000);
+    }
 
-		// Add mark all videos as watched button.
-		$('#channel-navigation-menu').append('<li><p><button aria-label="Show watched videos" type="button" class="yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty" role="button" id="markAllVideos"><span class="yt-uix-button-content">Mark all videos as watched</span></button></p></li>');
+    grid.markAllVisibleVideos = function () {
+        var videos = $('.feed-item-container');
 
-		$('#channel-navigation-menu').on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
+        var videoArray = [];
+        videos.each(function (idx, video) {
+            var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
 
+            videoArray.push(videoId);
+        });
 
-		grid.loadMoreVideos();
-	};
+        YTG.history.massAddToHistory(videoArray);
+    };
 
-	grid.loadMoreVideos = function()
-	{
-		// Load more videos, then load some more
-		// Note: don't use jquery here because it messes with the event dispatch stuff.
-		YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
-		setTimeout(function()
-		{
-			YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
-		}, 2000);
-	}
+    // Get all videos marked as watched on the
+    // YT side of things, remove them from our
+    // internal history
+    grid.markYTVideos = function () {
+        var videos = [];
+        $('.watched').each(function (idx, elm) {
+            var videoId = $(elm).parents('.feed-item-container').find('.addto-watch-later-button').attr('data-video-ids');
+            videos.push(videoId);
+        });
 
-	grid.markAllVisibleVideos = function()
-	{
-		var videos = $('.feed-item-container');
+        YTG.history.massRemoveFromHistory(videos);
+    };
 
-		var videoArray = [];
-		videos.each(function(idx, video)
-		{
-			var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
+    grid.markVideos = function () {
+        var videos = $('.yt-shelf-grid-item');
 
-			videoArray.push(videoId);
-		});
+        videos.each(function (idx, video) {
+            grid.cleanVideo(video);
+            grid.markVideo(video);
+        });
+    };
 
-		YTG.history.massAddToHistory(videoArray);
-	};
+    grid.markVideo = function (videoElm) {
+        videoElm = $(videoElm);
+        var videoId = videoElm.find('.addto-watch-later-button').attr('data-video-ids');
 
-	// Get all videos marked as watched on the
-	// YT side of things, remove them from our
-	// internal history
-	grid.markYTVideos = function()
-	{
-		var videos = [];
-		$('.watched').each(function(idx, elm)
-		{
-			var videoId = $(elm).parents('.feed-item-container').find('.addto-watch-later-button').attr('data-video-ids');
-			videos.push(videoId);
-		});
-
-		YTG.history.massRemoveFromHistory(videos);
-	};
-
-	grid.markVideos = function()
-	{
-		var videos = $('.feed-item-container');
-
-		videos.each(function(idx, video)
-		{
-			grid.cleanVideo(video);
-			grid.markVideo(video);
-		});
-	};
-
-	grid.markVideo = function(videoElm)
-	{
-		var videoId = $(videoElm).find('.addto-watch-later-button').attr('data-video-ids');
-
-		var videoLinkElm = $(videoElm).find('.yt-lockup-thumbnail a');
+        var videoLinkElm = videoElm.find('.yt-lockup-thumbnail a');
 
         // Can't unmark these ones.
-        if (videoLinkElm.hasClass('watched'))
-        {
-            $(videoElm).addClass('watched');
-            $(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Cannot changed watched status');
+        if (videoElm.find('.watched').length > 0) {
+            videoElm.addClass('watched');
+            videoElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Cannot changed watched status');
         }
-		else if (!$(videoElm).hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId))
-		{
-            $(videoElm).addClass('ytg-watched');
-			videoLinkElm.prepend('<div class="watched-badge">WATCHED</div>');
-			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
-		}
-		else if($(videoElm).hasClass('ytg-watched') && !YTG.history.videoIsInHistory(videoId))
-		{
-            $(videoElm).removeClass('ytg-watched');
-			$(videoElm).find('.watched-message').remove();
-			$(videoElm).find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
-		}
+        else if (!videoElm.hasClass('ytg-watched') && YTG.history.videoIsInHistory(videoId)) {
+            videoElm.addClass('ytg-watched');
+            videoLinkElm.append('<div class="watched-badge">WATCHED</div>');
+            videoElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as unwatched');
+        }
+        else if (videoElm.hasClass('ytg-watched') && !YTG.history.videoIsInHistory(videoId)) {
+            videoElm.removeClass('ytg-watched');
+            videoElm.find('.watched-badge').remove();
+            videoElm.find('.ytg-mark-watched').attr('data-tooltip-text', 'Mark as watched');
+        }
 
 
-		if ($(videoElm).hasClass('ytg-watched') || $(videoElm).hasClass('watched') || $(videoElm).find('.watched').length)
-		{
-			videoLinkElm.parents('.feed-item-container').addClass('ytg-contains-watched');
-		}
-		else
-		{
-			videoLinkElm.parents('.feed-item-container').removeClass('ytg-contains-watched');
-		}
-	};
+        if (videoElm.hasClass('ytg-watched') || videoElm.hasClass('watched') || videoElm.find('.watched').length) {
+            videoElm.addClass('ytg-contains-watched');
+        }
+        else {
+            videoElm.removeClass('ytg-contains-watched');
+        }
+    };
 
-	grid.cleanVideo = function(videoElm)
-	{
-		if (!$(videoElm).hasClass('ytg-cleaned'))
-		{
-			// Fix formatting
-			var metaInfo       = $(videoElm).find('.yt-lockup-meta-info');
+    grid.cleanVideo = function (videoElm) {
+        if (!$(videoElm).hasClass('ytg-cleaned')) {
 
-			if ($('.individual-feed').length)
-			{
-				var uploadUserLink = $(videoElm).find('.feed-author-bubble').attr('href');
-				var uploadString   = metaInfo.find('li:first').text() + ' by <a class="ytg-channel-link" href="'+uploadUserLink+'">' + $(videoElm).find('.feed-author-bubble img').attr('alt')+'</a>';
-			}
+            grid.addMarkWatchedBtn(videoElm);
 
-			$(videoElm).find('.feed-item-header').remove();
+            // Fix the thumbnail if its broken.
+            $('.yt-thumb-clip img[src*="pixel"]').each(function (idx, elm) {
+                $(this).attr('src', $(this).attr('data-thumb'));
+            });
 
-			var views = $(videoElm).find('.yt-lockup-meta-info li:contains("views")').text()
-			var badges = $(videoElm).find('.yt-lockup-badges').html() || '';
+            $(videoElm).addClass('ytg-cleaned');
+        }
+    };
 
-			$(videoElm).find('.item-badge-line').remove();
+    grid.addMarkWatchedBtn = function (videoElm) {
+        // Set up the mark as watched button.
+        var button = $(videoElm).find('.addto-watch-later-button').clone();
 
-			if ($('.individual-feed').length)
-			{
-				metaInfo.html('<li><p>'+uploadString+'</p></li>');
-				metaInfo.append('<li><p class="ytg-views">'+views+'</p>'+badges+'</li>');
-				$(videoElm).find('.yt-user-name-icon-verified').remove();
-			}
+        button.removeClass('addto-watch-later-button addto-button');
+        button.addClass('ytg-mark-watched');
+        button.attr('data-tooltip-text', 'Mark as watched');
 
+        $(videoElm).find('.contains-addto').append(button);
+    };
 
-			if ($(videoElm).find('.yt-badge').text() == 'UPCOMING EVENT')
-			{
-				$(videoElm).find('.yt-badge').parents('.item-badge-line').remove();
-			}
+    grid.timedVideoMark = function (ms, loop) {
+        setTimeout(function () {
+            if ($('body').hasClass('ytg-gridable')) {
+                // Refetch the watch history in case it changed
+                YTG.platform.getStorageItem('watchHistory', function (data) {
+                    YTG.history.setHistory(data.watchHistory);
+                    YTG.grid.markVideos();
 
-			grid.addMarkWatchedBtn(videoElm);
+                    if (loop) {
+                        grid.timedVideoMark(ms, loop);
+                    }
+                });
+            }
+        }, ms);
+    };
 
-			// Fix the thumbnail if its broken.
-			$('.yt-thumb-clip img[src*="pixel"]').each(function(idx, elm)
-			{
-				$(this).attr('src', $(this).attr('data-thumb'));
-			});
+    grid.setHideVideos = function (hideVideos) {
+        grid.hideVideos = hideVideos || false;
+    };
 
-			$(videoElm).addClass('ytg-cleaned');
-		}
-	};
+    grid.toggleVideos = function () {
+        if ($(this).hasClass('yt-uix-button-toggled')) {
+            return false;
+        }
 
-	grid.addMarkWatchedBtn = function(videoElm)
-	{
-		// Set up the mark as watched button.
-		var button = $(videoElm).find('.addto-watch-later-button').clone();
+        grid.hideVideos = !grid.hideVideos;
+        grid.setViewToggle();
 
-		button.removeClass('addto-watch-later-button addto-button');
-		button.addClass('ytg-mark-watched');
-		button.attr('data-tooltip-text', 'Mark as watched');
+        YTG.platform.setStorageItem('hideVideos', grid.hideVideos);
+    };
 
-		$(videoElm).find('.contains-addto').append(button);
-	};
+    grid.setViewToggle = function () {
+        $('#hideVideos,#showVideos').removeClass('yt-uix-button-toggled');
 
-	grid.timedVideoMark = function(ms, loop)
-	{
-		setTimeout(function()
-		{
-			if ($('body').hasClass('ytg-gridable'))
-			{
-				// Refetch the watch history in case it changed
-				YTG.platform.getStorageItem('watchHistory', function(data)
-				{
-					YTG.history.setHistory(data.watchHistory);
-					YTG.grid.markVideos();
+        if (grid.hideVideos) {
+            $('#hideVideos').addClass('yt-uix-button-toggled');
+            $('#page').addClass('ytg-hide-watched-videos');
+        }
+        else {
+            $('#showVideos').addClass('yt-uix-button-toggled');
+            $('#page').removeClass('ytg-hide-watched-videos');
+        }
+    };
 
-					if (loop)
-					{
-						grid.timedVideoMark(ms, loop);
-					}
-				});
-			}
-		}, ms);
-	};
-
-	grid.setHideVideos = function(hideVideos)
-	{
-		grid.hideVideos = hideVideos || false;
-	};
-
-	grid.toggleVideos = function()
-	{
-		if ($(this).hasClass('yt-uix-button-toggled'))
-		{
-			return false;
-		}
-
-		grid.hideVideos = !grid.hideVideos;
-		grid.setViewToggle();
-
-		YTG.platform.setStorageItem('hideVideos', grid.hideVideos);
-	};
-
-	grid.setViewToggle = function()
-	{
-		$('#channel-navigation-menu .view-toggle-button').removeClass('yt-uix-button-toggled');
-
-		if (grid.hideVideos)
-		{
-			$('#hideVideos').addClass('yt-uix-button-toggled');
-			$('#page').addClass('ytg-hide-watched-videos');
-		}
-		else
-		{
-			$('#showVideos').addClass('yt-uix-button-toggled');
-			$('#page').removeClass('ytg-hide-watched-videos');
-		}
-	};
-
-	// Is a subs page, a collection page,
-	// watch history or watch later page
-	// and not an activty page.
-	grid.isGridable = function(url)
-	{
-		var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
+    // Is a subs page, a collection page,
+    // watch history or watch later page
+    // and not an activty page.
+    grid.isGridable = function (url) {
+        var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
 
         // Are we seeing YT's grid layout? Bail out and don't touch the page for now
         // need to see what we can do.
-        if ($('.yt-shelf-grid-item').length > 0)
+        //if ($('.yt-shelf-grid-item').length > 0)
+        //{
+        //    return false;
+        //}
+
+        if ($('.yt-shelf-grid-item').length === 0)
         {
             return false;
         }
 
-		// First off, we never ever (yet) want to
-		// gridify an activity page.
-		if (url.indexOf('/activity') !== -1)
-		{
-			return false;
-		}
+        // First off, we never ever (yet) want to
+        // gridify an activity page.
+        if (url.indexOf('/activity') !== -1) {
+            return false;
+        }
 
-		var gridable = gridablePages.some(function(gridCheck)
-		{
-			if (url.indexOf(gridCheck) >= 0)
-			{
-				return true;
-			}
-		});
+        var gridable = gridablePages.some(function (gridCheck) {
+            if (url.indexOf(gridCheck) >= 0) {
+                return true;
+            }
+        });
 
-		return gridable;
-	};
+        return gridable;
+    };
 
-	return grid;
+    return grid;
 }(YTG, YTG.grid || {}));
