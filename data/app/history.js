@@ -5,7 +5,7 @@ YTG.history = (function (YTG, history) {
 	// We don't have unlimted storage
 	// so there needs to be a limit on
 	// how big this history is.
-	history.maxVideoHistoryCount = 200;
+	history.maxVideoHistoryCount = 400;
 
 
 	history.setHistory = function(watchHistory)
