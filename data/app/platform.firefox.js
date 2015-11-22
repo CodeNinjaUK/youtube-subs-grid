@@ -4,8 +4,6 @@ YTG.platform = (function (YTG, platform) {
 
 	platform.getStorageItem = function(key, callback)
 	{
-		var message = { method: 'fetch', 'key': key };
-		
 		callback(platform.storage);
 	};
 
@@ -20,5 +18,5 @@ YTG.platform = (function (YTG, platform) {
 
 self.port.on('storageObject', function(storageObject)
 {
-	YTG.platform.storage = storageObject;
+    YTG.platform.storage = storageObject;
 });
