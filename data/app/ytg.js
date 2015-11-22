@@ -9,14 +9,14 @@ YTG = (function (self) {
 			YTG.history.setHistory(data.watchHistory);
 
 			// Record all links leading to videos.
-			$('#page').on('click', '.feed-item-container a:not(.ytg-channel-link)', YTG.history.addToHistoryHandler);
+			//$('#page').on('click', '.feed-item-container a:not(.ytg-channel-link)', YTG.history.addToHistoryHandler);
 
 			// Is this a video watch page? Make sure we store that in the history
 			// in case the user came from an external source.
-			if ($('meta[itemprop="videoId"]').length)
-			{
-				YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
-			}
+			//if ($('meta[itemprop="videoId"]').length)
+			//{
+			//	YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
+			//}
 		});
 	};
 
@@ -37,7 +37,7 @@ YTG = (function (self) {
 			});
 
 			/* CSS fix for the subs page */
-			$('.branded-page-v2-primary-col').addClass('clearfix');
+			//$('.branded-page-v2-primary-col').addClass('clearfix');
 		}
 
 		return false;
@@ -52,15 +52,7 @@ YTG = (function (self) {
 
 			if (YTG.grid.isGridable(url))
 			{
-				// Drop in to a loop until the page has finished loading.
-				var loopId = window.setInterval(function()
-				{
-					if ($('#progress').length === 0)
-					{
-						self.gridInit();
-						window.clearInterval(loopId);
-					}
-				});
+                self.gridInit();
 			}
 		}
 

@@ -79,12 +79,12 @@ YTG.grid = (function (YTG, grid) {
     // internal history
     grid.markYTVideos = function () {
         var videos = [];
-        $('.watched').each(function (idx, elm) {
-            var videoId = $(elm).parents('.feed-item-container').find('.addto-watch-later-button').attr('data-video-ids');
+        YTG.grid.allVideos().find('.watched [data-video-ids]').each(function (idx, elm) {
+            var videoId = $(elm).attr('data-video-ids');
             videos.push(videoId);
         });
 
-        YTG.history.massRemoveFromHistory(videos);
+        YTG.history.massRemoveFromHistory($.unique(videos));
     };
 
     grid.markVideos = function () {

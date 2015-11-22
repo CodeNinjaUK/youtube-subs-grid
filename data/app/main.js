@@ -1,10 +1,15 @@
 $(document).ready(function(){
 
-	// Drop in to a short loop to check for href changes
-	window.setInterval(function()
-	{
-		YTG.checkPage(window.location.href);
-	}, 200);
+    YTG.ytInit();
 
-	YTG.ytInit();
+    YTG.checkPage(window.location.href);
+
+    // spfdone is a YT event in what ever JS page switch thing
+    // they have going on.
+    document.addEventListener("spfdone", function(e)
+    {
+        YTG.checkPage(window.location.href);
+    });
+
+
 });
