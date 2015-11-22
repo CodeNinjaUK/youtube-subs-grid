@@ -1,5 +1,11 @@
-.*
-*
-!package.json
-!/data/**
-!/lib/**
+*.xpi
+*.zip
+/resources/**
+notes.md
+.git*
+.sublime-*
+README.md
+.idea*
+.jpmignore
+.project
+.DS_Store
