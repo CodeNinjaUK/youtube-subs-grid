@@ -7,9 +7,7 @@ YTG.grid = (function (YTG, grid) {
         YTG.grid.markVideos();
 
         // $('.shelf-content').first().html($('.yt-shelf-grid-item').detach())
-
-        // Monitor the page constantly for changes
-        YTG.grid.timedVideoMark(500, true);
+        // $('.menu-container.shelf-title-cell .feed-item-action-menu ul').prepend($('.menu-container.shelf-title-cell .feed-item-action-menu li:has(a)').first().clone())
 
         // Append our show/hide toggle
         var headerContainer = $('.shelf-title-table').first();
@@ -150,22 +148,6 @@ YTG.grid = (function (YTG, grid) {
         $(videoElm).find('.contains-addto').append(button);
     };
 
-    grid.timedVideoMark = function (ms, loop) {
-        setTimeout(function () {
-            if ($('body').hasClass('ytg-gridable')) {
-                // Refetch the watch history in case it changed
-                YTG.platform.getStorageItem('watchHistory', function (data) {
-                    YTG.history.setHistory(data.watchHistory);
-                    YTG.grid.markVideos();
-
-                    if (loop) {
-                        grid.timedVideoMark(ms, loop);
-                    }
-                });
-            }
-        }, ms);
-    };
-
     grid.setHideVideos = function (hideVideos) {
         grid.hideVideos = hideVideos || false;
     };
@@ -211,13 +193,11 @@ YTG.grid = (function (YTG, grid) {
             return false;
         }
 
-        var gridable = gridablePages.some(function (gridCheck) {
+        return gridablePages.some(function (gridCheck) {
             if (url.indexOf(gridCheck) >= 0) {
                 return true;
             }
         });
-
-        return gridable;
     };
 
     return grid;
