@@ -10,6 +10,4 @@ $(document).ready(function(){
     {
         YTG.checkPage(window.location.href);
     });
-
-
 });

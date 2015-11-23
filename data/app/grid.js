@@ -6,8 +6,22 @@ YTG.grid = (function (YTG, grid) {
         YTG.grid.markYTVideos();
         YTG.grid.markVideos();
 
-        // $('.shelf-content').first().html($('.yt-shelf-grid-item').detach())
-        // $('.menu-container.shelf-title-cell .feed-item-action-menu ul').prepend($('.menu-container.shelf-title-cell .feed-item-action-menu li:has(a)').first().clone())
+        var videoCount = grid.allVideos().length;
+        setInterval(function()
+        {
+            if (grid.allVideos().length > videoCount)
+            {
+                videoCount = grid.allVideos().length;
+
+                YTG.grid.markVideos();
+
+                // Are we in Classic mode? Fire cleanup for that too.
+
+                // TODO.
+                // $('.shelf-content').first().html($('.yt-shelf-grid-item').detach())
+
+            }
+        }, 1000);
 
         // Append our show/hide toggle
         var headerContainer = $('.shelf-title-table').first();
@@ -44,6 +58,7 @@ YTG.grid = (function (YTG, grid) {
         headerContainer.on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
         YTG.grid.setViewToggle();
 
+
         grid.loadMoreVideos();
     };
 
@@ -53,6 +68,7 @@ YTG.grid = (function (YTG, grid) {
     };
 
     grid.loadMoreVideos = function () {
+
         // Load more videos, then load some more
         // Note: don't use jquery here because it messes with the event dispatch stuff.
         YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
@@ -179,25 +195,23 @@ YTG.grid = (function (YTG, grid) {
     // Is a subs page, a collection page,
     // watch history or watch later page
     // and not an activty page.
-    grid.isGridable = function (url) {
+    grid.isSubsSection = function (url) {
         var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
-
-        if (grid.allVideos().length === 0)
-        {
-            return false;
-        }
-
-        // First off, we never ever (yet) want to
-        // gridify an activity page.
-        if (url.indexOf('/activity') !== -1) {
-            return false;
-        }
 
         return gridablePages.some(function (gridCheck) {
             if (url.indexOf(gridCheck) >= 0) {
                 return true;
             }
         });
+    };
+
+    grid.isGridable = function (url) {
+
+        if (grid.isSubsSection(url)) {
+            return grid.allVideos().length > 0;
+        }
+
+        return false;
     };
 
     return grid;
