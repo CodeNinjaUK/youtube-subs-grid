@@ -7,11 +7,11 @@ YTG.platform = (function (YTG, platform) {
 		chrome.storage.sync.get(item, callback);
 	};
 
-	platform.setStorageItem = function(key, data)
+	platform.setStorageItem = function(key, data, callback)
 	{
 		var object = {};
 		object[key] = data;
-		chrome.storage.sync.set(object);
+		chrome.storage.sync.set(object, callback);
 	};
 
 	return platform;
