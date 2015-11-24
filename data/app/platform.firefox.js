@@ -8,10 +8,12 @@ YTG.platform = (function (YTG, platform) {
 	{
         var callbackName = 'storageGetCallback' + Math.random();
 
+        var payload = {key: key, callbackName: callbackName};
+
         // Listen for the callback from firefox.js
         self.port.once(callbackName, callback);
 
-        self.port.emit("getStorage", callbackName);
+        self.port.emit("getStorage", payload);
 	};
 
 	platform.setStorageItem = function(key, value, callback)
