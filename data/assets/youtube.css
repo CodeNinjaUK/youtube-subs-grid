@@ -1,6 +1,7 @@
 .ytg-gridable.ytg-classic-mode.site-center-aligned #content {
     margin: 0 auto;
     width: 98%;
+    max-width: 1880px;
 }
 
 .ytg-gridable.ytg-classic-mode.site-center-aligned .ytg-controls
