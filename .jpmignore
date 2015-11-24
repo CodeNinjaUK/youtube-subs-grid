@@ -3,7 +3,7 @@
 /resources/**
 notes.md
 .git*
-.sublime-*
+*.sublime-*
 README.md
 .idea*
 .jpmignore
@@ -12,3 +12,5 @@ README.md
 manifest.json
 data/app/platform.chrome.js
 data/app/platform.test.js
+data/assets/icon-16.png
+data/assets/icon-128.png
