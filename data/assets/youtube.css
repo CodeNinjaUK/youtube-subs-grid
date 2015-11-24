@@ -13,6 +13,11 @@
     float:right;
 }
 
+.ytg-gridable.ytg-classic-mode.site-center-aligned ul.shelf-content { text-align: center; }
+.ytg-gridable.ytg-classic-mode.site-center-aligned ul.shelf-content > li { text-align: left; }
+
+
+
 .ytg-gridable button.ytg-mark-watched {
     background-image: url(https://s.ytimg.com/yts/imgbin/www-hitchhiker-vflqZgjUU.png) !important;
     background-right: no-repeat !important;
