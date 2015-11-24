@@ -1,27 +1,42 @@
 var YTG = YTG || {};
 
 YTG.grid = (function (YTG, grid) {
-    grid.setup = function () {
+    grid.setup = function (isClassicGridMode) {
 
         YTG.grid.markYTVideos();
         YTG.grid.markVideos();
 
-        var videoCount = grid.allVideos().length;
-        setInterval(function()
+        if (isClassicGridMode)
         {
-            if (grid.allVideos().length > videoCount)
+            $('.ytg-gridable').addClass('ytg-full-width');
+            grid.classicModeCleanup();
+        }
+
+        $('body').on('click', '.load-more-button', function(e)
+        {
+            var videoCount = grid.allVideos().length;
+
+            // Drop in to a high freq loop and wait for the data to finish loading.
+            // This won't have to run for long so can run more often and be more responsive.
+            var loopId = setInterval(function()
             {
-                videoCount = grid.allVideos().length;
+                if (grid.allVideos().length > videoCount)
+                {
+                    clearInterval(loopId);
 
-                YTG.grid.markVideos();
+                    videoCount = grid.allVideos().length;
 
-                // Are we in Classic mode? Fire cleanup for that too.
+                    YTG.grid.markVideos();
 
-                // TODO.
-                // $('.shelf-content').first().html($('.yt-shelf-grid-item').detach())
+                    // Are we in Classic mode? Fire cleanup for that too.
+                    if (isClassicGridMode)
+                    {
+                        grid.classicModeCleanup();
+                    }
+                }
+            }, 10);
+        });
 
-            }
-        }, 1000);
 
         // Append our show/hide toggle
         var headerContainer = $('.shelf-title-table').first();
@@ -65,6 +80,14 @@ YTG.grid = (function (YTG, grid) {
     grid.allVideos = function()
     {
         return $('.yt-shelf-grid-item');
+    };
+
+    grid.classicModeCleanup = function()
+    {
+        $('.shelf-content').first().html($('.yt-shelf-grid-item').detach());
+
+        $('h2.shelf-title-cell').remove();
+        $('ol.section-list > li:not(:first-child)').remove();
     };
 
     grid.loadMoreVideos = function () {
