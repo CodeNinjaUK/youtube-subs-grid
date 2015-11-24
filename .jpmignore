@@ -9,3 +9,6 @@ README.md
 .jpmignore
 .project
 .DS_Store
+manifest.json
+app/platform.chrome.js
+app/platform.test.js
