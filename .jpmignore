@@ -10,5 +10,5 @@ README.md
 .project
 .DS_Store
 manifest.json
-app/platform.chrome.js
-app/platform.test.js
+data/app/platform.chrome.js
+data/app/platform.test.js
