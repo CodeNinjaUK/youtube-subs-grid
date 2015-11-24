@@ -1,11 +1,16 @@
-.ytg-gridable.ytg-full-width.site-center-aligned #content {
-    margin-left: 0;
-    margin-right: 0;
-    width: 100%;
+.ytg-gridable.ytg-classic-mode.site-center-aligned #content {
+    margin: 0 auto;
+    width: 98%;
 }
 
-.ytg-gridable.site-center-aligned .yt-card {
-    margin: 0;
+.ytg-gridable.ytg-classic-mode.site-center-aligned .ytg-controls
+{
+    float:left;
+}
+
+.ytg-gridable.ytg-classic-mode.site-center-aligned .shelf-item .shelf-title-row
+{
+    float:right;
 }
 
 .ytg-gridable button.ytg-mark-watched {

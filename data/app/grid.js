@@ -8,7 +8,7 @@ YTG.grid = (function (YTG, grid) {
 
         if (isClassicGridMode)
         {
-            $('.ytg-gridable').addClass('ytg-full-width');
+            $('.ytg-gridable').addClass('ytg-classic-mode');
             grid.classicModeCleanup();
         }
 
@@ -41,7 +41,7 @@ YTG.grid = (function (YTG, grid) {
         // Append our show/hide toggle
         var headerContainer = $('.shelf-title-table').first();
 
-        headerContainer.prepend(`<div> <h2 class="branded-page-module-title"> Watched videos:
+        headerContainer.prepend(`<div class="ytg-controls"> <h2 class="branded-page-module-title"> Watched videos:
                                         <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required">
                                     <button
                                         aria-label="Show watched videos" type="button"
