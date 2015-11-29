@@ -29,5 +29,24 @@ YTG.platform = (function (YTG, platform) {
 		self.port.emit("setStorage", payload);
 	};
 
+    platform.broadcastVideoWatched = function()
+    {
+        self.port.emit("videoWatched");
+    };
+
+    platform.getControlMarkup = function(callback)
+    {
+        var callbackName = 'controlMarkupCallback' + Math.random();
+
+        self.port.once(callbackName, callback);
+
+        self.port.emit("getControlMarkup", callbackName);
+    };
+
 	return platform;
 }(YTG, YTG.platform || {}));
+
+self.port.on('videoHistoryUpdated', function()
+{
+    YTG.grid.updateWatchedVideos();
+});

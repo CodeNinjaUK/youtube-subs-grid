@@ -16,6 +16,13 @@
 			"css": ["data/assets/youtube.css"]
 		}
 	],
+    "web_accessible_resources": [
+      "data/assets/control.html"
+    ],
+    "background": {
+      "scripts": ["lib/chrome.js"],
+      "persistent": false
+    },
 	"permissions": [
 		"storage"
 	]

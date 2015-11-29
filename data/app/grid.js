@@ -23,6 +23,15 @@ YTG.grid = (function (YTG, grid) {
         grid.loadMoreVideos();
     };
 
+    grid.updateWatchedVideos = function()
+    {
+        YTG.platform.getStorageItem('watchHistory', function (data) {
+            YTG.history.setHistory(data.watchHistory);
+            YTG.grid.markVideos();
+        });
+    };
+
+
     grid.allVideos = function()
     {
         return $('.yt-shelf-grid-item');
@@ -72,14 +81,17 @@ YTG.grid = (function (YTG, grid) {
     }
 
     grid.markAllVisibleVideos = function () {
-        var videoArray = [];
-        grid.allVideos().each(function (idx, video) {
-            var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
 
-            videoArray.push(videoId);
-        });
+        if (window.confirm('Are you sure you want to mark all videos as watched?')) {
+            var videoArray = [];
+            grid.allVideos().each(function (idx, video) {
+                var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
 
-        YTG.history.massAddToHistory(videoArray);
+                videoArray.push(videoId);
+            });
+
+            YTG.history.massAddToHistory(videoArray);
+        }
     };
 
     // Get all videos marked as watched on the
@@ -211,37 +223,17 @@ YTG.grid = (function (YTG, grid) {
     grid.buildHistoryControls = function() {
         var headerContainer = $('.shelf-title-table').first();
 
-        headerContainer.prepend(`<div class="ytg-controls"> <h2 class="branded-page-module-title"> Watched videos:
-                                        <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required">
-                                    <button
-                                        aria-label="Show watched videos" type="button"
-                                        class="start view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
-                                        data-button-toggle="true" role="button" id="showVideos">
-                                    <span class="yt-uix-button-content">Show</span>
-                                    </button>
-                                    </span>
-                                    <span class="yt-uix-button-group vm-view-toggle" data-button-toggle-group="required">
-                                    <button
-                                        aria-label="Hide watched videos"
-                                        type="button"
-                                        class="end view-toggle-button yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
-                                        data-button-toggle="true" role="button" id="hideVideos">
-                                    <span class="yt-uix-button-content">Hide</span>
-                                    </button>
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    <button aria-label="Show watched videos"
-                                        type="button"
-                                        class="yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
-                                        role="button"
-                                        id="markAllVideos">
-                                        <span class="yt-uix-button-content">Mark all videos as watched</span>
-                                    </button></h2>
-                                    </div>
-                                `);
-        headerContainer.on('click', '.view-toggle-button', YTG.grid.toggleVideos);
-        headerContainer.on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
-        YTG.grid.setViewToggle();
+        YTG.platform.getControlMarkup(function(markup)
+        {
+            headerContainer.prepend(markup);
+
+            headerContainer.on('click', '.view-toggle-button', YTG.grid.toggleVideos);
+            headerContainer.on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
+            YTG.grid.setViewToggle();
+
+            // Move the grid selector in to our markup for better style control.
+            $('.ytg-grid-selector').append($('.shelf-title-row').detach());
+        });
     };
 
     return grid;

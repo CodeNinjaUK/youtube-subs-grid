@@ -117,7 +117,10 @@ YTG.history = (function (YTG, history) {
 	history.saveHistory = function()
 	{
 		history.cullHistory();
-		YTG.platform.setStorageItem('watchHistory', history.watchHistory);
+		YTG.platform.setStorageItem('watchHistory', history.watchHistory, function()
+        {
+            YTG.platform.broadcastVideoWatched();
+        });
 	};
 
 	history.videoIsInHistory = function(videoId)

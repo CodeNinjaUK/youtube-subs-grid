@@ -4,10 +4,28 @@ YTG = (function (self) {
 
 	self.ytInit = function()
 	{
+        YTG.checkPage(window.location.href);
+
 		YTG.platform.getStorageItem('watchHistory', function(data)
 		{
 			YTG.history.setHistory(data.watchHistory);
-		});
+
+            //Is this a video watch page? Make sure we store that in the history
+            //in case the user came from an external source.
+            if ($('meta[itemprop="videoId"]').length)
+            {
+                YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
+
+                // As this isn't the subs page we don't have the app initialised.
+                // Dispatch a message to the event/background/extension page and have
+                // it notify any subscription pages they should re-check their watch
+                // history.
+
+                YTG.platform.broadcastVideoWatched();
+
+            }
+
+        });
 	};
 
 	self.gridInit = function(isClassicGridMode)
@@ -16,10 +34,7 @@ YTG = (function (self) {
 		if (!$('body').hasClass('ytg-gridable'))
 		{
 			$('body').addClass('ytg-gridable');
-
-			// selector fun - yolo
-			$('#page').on('click', '.ytg-mark-watched:not(.watched .ytg-mark-watched)', YTG.history.toggleWatchedHandler);
-
+            
 			YTG.platform.getStorageItem('hideVideos', function(data)
 			{
 				YTG.grid.setHideVideos(data.hideVideos);
