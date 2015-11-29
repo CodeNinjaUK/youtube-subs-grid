@@ -15,12 +15,10 @@ YTG.grid = (function (YTG, grid) {
             grid.classicModeCleanup();
         }
 
-        $('body').on('click', '.load-more-button', grid.onLoadMore);
-
         // Append our show/hide toggle
         grid.buildHistoryControls();
 
-        grid.loadMoreVideos();
+        grid.watchLoadMoreButton();
     };
 
     grid.updateWatchedVideos = function()
@@ -37,29 +35,51 @@ YTG.grid = (function (YTG, grid) {
         return $('.yt-shelf-grid-item');
     };
 
-    grid.onLoadMore = function()
+    // "What the hell" I hear you thinking, "why do you need this?"
+    // Youtube has a "load more" button at the bottom of your list of
+    // subscriptions you can click, as well as autoloading a set of videos as you
+    // scroll - but only once. There's no event I can find that YT
+    // fires for the loading of videos, and short of intercepting
+    // all AJAX calls (which I didn't seem to work anyway) this seemed
+    // the best way with out resorting to constantly running loops.
+    grid.watchLoadMoreButton = function()
     {
-        var videoCount = grid.allVideos().length;
+        // select the target node
+        var target = document.querySelector('#browse-items-primary');
 
-        // Drop in to a high freq loop and wait for the data to finish loading.
-        // This won't have to run for long so can run more often and be more responsive.
-        var loopId = setInterval(function()
-        {
-            if (grid.allVideos().length > videoCount)
-            {
-                clearInterval(loopId);
+        // create an observer instance
+        var observer = new MutationObserver(function(mutations) {
+            mutations.some(function(mutation) {
 
-                videoCount = grid.allVideos().length;
-
-                YTG.grid.markVideos();
-
-                // Are we in Classic mode? Fire cleanup for that too.
-                if (grid.isClassicGridMode)
+                if (mutation.type == 'childList' && mutation.addedNodes.length > 0)
                 {
-                    grid.classicModeCleanup();
+                    var nodes = Array.prototype.slice.call(mutation.addedNodes);
+                    nodes.some(function(element)
+                    {
+                        if ($(element).hasClass('load-more-button'))
+                        {
+                            YTG.grid.markVideos();
+
+                            // Are we in Classic mode? Fire cleanup for that too.
+                            if (YTG.grid.isClassicGridMode)
+                            {
+                                YTG.grid.classicModeCleanup();
+                            }
+
+                            return true;
+                        }
+                    });
+
+                    return true;
                 }
-            }
-        }, 10);
+            });
+        });
+
+        // configuration of the observer:
+        var config = { childList: true };
+
+        // pass in the target node, as well as the observer options
+        observer.observe(target, config);
     };
 
     grid.classicModeCleanup = function()
