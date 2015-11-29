@@ -34,7 +34,7 @@ YTG = (function (self) {
 		if (!$('body').hasClass('ytg-gridable'))
 		{
 			$('body').addClass('ytg-gridable');
-            
+
 			YTG.platform.getStorageItem('hideVideos', function(data)
 			{
 				YTG.grid.setHideVideos(data.hideVideos);

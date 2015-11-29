@@ -52,6 +52,20 @@ YTG.history = (function (YTG, history) {
 		history.saveHistory();
 	};
 
+    history.resetWatchHistory = function()
+    {
+        history.watchHistory = [];
+        history.saveHistory();
+    };
+
+    history.resetWatchHistoryHandler = function()
+    {
+       if (window.confirm('Are you sure you want to reset your Subs Grid watch history? This cannot be undone.'))
+       {
+           history.resetWatchHistory();
+       }
+    };
+
 	history.updateSubscriptions = function()
 	{
 		if (YTG.grid && YTG.grid.isGridable(window.location.href))
