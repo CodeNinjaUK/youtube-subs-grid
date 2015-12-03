@@ -1,5 +1,7 @@
 YTG = (function (self) {
 
+    self.internalFeatureVersion = 1;
+
 	self.currentPage = '';
 
 	self.ytInit = function()

@@ -20,7 +20,7 @@
                     role="button" id="markAllVideos">
                 <span class="yt-uix-button-content">Mark all videos as watched</span>
             </button>
-            <a class="ytg-subs-grid-modal-button ytg-has-updates"></a>
+            <a class="ytg-subs-grid-settings-button"></a>
         </div>
 
         <div class="spacer">
@@ -37,16 +37,27 @@
             <hr class="yt-horizontal-rule ">
 
 
-            <div class="ytg-setting">
+            <div class="ytg-setting-container">
                 <label>
-                    <span class="yt-uix-form-input-checkbox-container "><input type="checkbox" class="yt-uix-form-input-checkbox setting-checkbox">
+                    <span class="yt-uix-form-input-checkbox-container ">
+                        <input type="checkbox" class="yt-uix-form-input-checkbox setting-checkbox ytg-setting" name="scrollAutoLoadVideos" value="1">
                         <span class="yt-uix-form-input-checkbox-element"></span>
                     </span>
                     Auto load videos as you scroll.
                 </label>
+
+
+                <span class="yt-uix-hovercard">
+                    <span class="yt-uix-hovercard-target setting_tooltip" data-position="topright">
+                        <span class="yt-help-icon yt-sprite"></span>
+                    </span>
+                    <div class="yt-uix-hovercard-content">
+                        <p>Even with this setting turned off currently Youtube will auto-load videos at least once as you scroll, this can't be stopped.</p>
+                    </div>
+                </span>
             </div>
 
-            <div class="ytg-setting">
+            <div class="ytg-setting-container">
                 <button aria-label="Show watched videos" type="button"
                         class="ytg-reset-mark-all-watched yt-uix-button yt-uix-button-default yt-uix-button-size-default yt-uix-button-empty"
                         role="button" id="resetWatchHistory">
@@ -63,6 +74,8 @@
                     </div>
                 </span>
             </div>
+
+            <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-primary ytg-exit-settings" type="submit"><span class="yt-uix-button-content">Close</span></button>
 
             <hr class="yt-horizontal-rule ">
 

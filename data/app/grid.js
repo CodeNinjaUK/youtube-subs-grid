@@ -2,7 +2,14 @@ var YTG = YTG || {};
 
 YTG.grid = (function (YTG, grid) {
 
+    grid.settings = {
+        'acknowledgedVersion': 0,
+        'scrollAutoLoadVideos': true
+    };
+
     grid.setup = function (isClassicGridMode) {
+
+        grid.videoCount = grid.allVideos().length;
 
         YTG.grid.markYTVideos();
         YTG.grid.markVideos();
@@ -18,7 +25,7 @@ YTG.grid = (function (YTG, grid) {
         // Append our show/hide toggle
         grid.buildHistoryControls();
 
-        grid.watchLoadMoreButton();
+        grid.watchForGridChanges();
     };
 
     grid.updateWatchedVideos = function()
@@ -38,45 +45,33 @@ YTG.grid = (function (YTG, grid) {
     // "What the hell" I hear you thinking, "why do you need this?"
     // Youtube has a "load more" button at the bottom of your list of
     // subscriptions you can click, as well as autoloading a set of videos as you
-    // scroll - but only once. There's no event I can find that YT
+    // scroll. There's no event I can find that YT
     // fires for the loading of videos, and short of intercepting
     // all AJAX calls (which I didn't seem to work anyway) this seemed
     // the best way with out resorting to constantly running loops.
-    grid.watchLoadMoreButton = function()
+    grid.watchForGridChanges = function()
     {
         // select the target node
         var target = document.querySelector('#browse-items-primary');
 
         // create an observer instance
         var observer = new MutationObserver(function(mutations) {
-            mutations.some(function(mutation) {
+            if (grid.allVideos().length > grid.videoCount)
+            {
+                grid.videoCount = grid.allVideos().length;
 
-                if (mutation.type == 'childList' && mutation.addedNodes.length > 0)
+                YTG.grid.markVideos();
+
+                // Are we in Classic mode? Fire cleanup for that too.
+                if (YTG.grid.isClassicGridMode)
                 {
-                    var nodes = Array.prototype.slice.call(mutation.addedNodes);
-                    nodes.some(function(element)
-                    {
-                        if ($(element).hasClass('load-more-button'))
-                        {
-                            YTG.grid.markVideos();
-
-                            // Are we in Classic mode? Fire cleanup for that too.
-                            if (YTG.grid.isClassicGridMode)
-                            {
-                                YTG.grid.classicModeCleanup();
-                            }
-
-                            return true;
-                        }
-                    });
-
-                    return true;
+                    YTG.grid.classicModeCleanup();
                 }
-            });
+            }
         });
 
         // configuration of the observer:
-        var config = { childList: true };
+        var config = { childList: true, subtree: true };
 
         // pass in the target node, as well as the observer options
         observer.observe(target, config);
@@ -95,10 +90,7 @@ YTG.grid = (function (YTG, grid) {
         // Load more videos, then load some more
         // Note: don't use jquery here because it messes with the event dispatch stuff.
         YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
-        setTimeout(function () {
-            YTG.fireEvent(document.querySelector('.load-more-button'), 'click');
-        }, 2000);
-    }
+    };
 
     grid.markAllVisibleVideos = function () {
 
@@ -220,9 +212,9 @@ YTG.grid = (function (YTG, grid) {
 
     // Is a subs page, a collection page,
     // watch history or watch later page
-    // and not an activty page.
+    // and not an activity page.
     grid.isSubsSection = function (url) {
-        var gridablePages = ['/feed/subscriptions', '/feed/SC']; // '/feed/watch_later', '/feed/history',
+        var gridablePages = ['/feed/subscriptions', '/feed/SC'];
 
         return gridablePages.some(function (gridCheck) {
             if (url.indexOf(gridCheck) >= 0) {
@@ -249,11 +241,69 @@ YTG.grid = (function (YTG, grid) {
 
             headerContainer.on('click', '.view-toggle-button', YTG.grid.toggleVideos);
             headerContainer.on('click', '#markAllVideos', YTG.grid.markAllVisibleVideos);
+
             YTG.grid.setViewToggle();
 
             // Move the grid selector in to our markup for better style control.
-            $('.ytg-grid-selector').append($('.shelf-title-row').detach());
+            $('.ytg-grid-selector').append($('.shelf-title-row .menu-container').first().detach());
+
+            YTG.platform.getStorageItem(grid.settings, function(data) {
+
+                // Override our defaults.
+                grid.settings = data;
+
+                if (data.acknowledgedVersion < YTG.internalFeatureVersion)
+                {
+                    $('.ytg-subs-grid-settings-button').addClass('ytg-has-updates');
+                }
+
+                $('.ytg-settings input[name="scrollAutoLoadVideos"]').prop('checked', data.scrollAutoLoadVideos);
+            });
         });
+    };
+
+    grid.settingsClickedHandler = function()
+    {
+        $('.ytg-settings').slideToggle({
+            complete: function () {
+                if ($('.ytg-subs-grid-settings-button').hasClass('ytg-has-updates'))
+                {
+                    $('.ytg-subs-grid-settings-button').removeClass('ytg-has-updates');
+                    YTG.platform.setStorageItem('acknowledgedVersion', YTG.internalFeatureVersion);
+                }
+            }
+        });
+    };
+
+    grid.settingCheckboxClickedHandler = function(e)
+    {
+        var settingElement = $(this);
+        var name = settingElement.attr('name');
+        var val = settingElement.prop('checked'); // Ignore the value just get the opposite of its checked status.
+
+        settingElement.prop('disabled', true);
+
+        YTG.platform.setStorageItem(name, val, function()
+        {
+            grid.settings.scrollAutoLoadVideos = val;
+            settingElement.prop('checked', val);
+
+            settingElement.prop('disabled', false);
+        });
+    };
+
+    grid.scrollHandler = function()
+    {
+        var s = $(window).scrollTop(),
+            d = $(document).height(),
+            c = $(window).height();
+
+        var scrollPercent = (s / (d-c)) * 100;
+
+        if (scrollPercent > 85 && grid.settings.scrollAutoLoadVideos)
+        {
+            grid.loadMoreVideos();
+        }
     };
 
     return grid;

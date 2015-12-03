@@ -12,7 +12,7 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*.youtube.com/*"],
-			"js": ["data/assets/jquery.min.js", "data/app/platform.chrome.js", "data/app/history.js", "data/app/main.js", "data/app/grid.js", "data/app/ytg.js"],
+			"js": ["data/assets/jquery.min.js", "data/app/platform.chrome.js", "data/app/history.js", "data/app/grid.js", "data/app/ytg.js", "data/app/main.js"],
 			"css": ["data/assets/youtube.css"]
 		}
 	],
