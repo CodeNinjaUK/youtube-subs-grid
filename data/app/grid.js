@@ -28,13 +28,19 @@ YTG.grid = (function (YTG, grid) {
         grid.watchForGridChanges();
     };
 
-    grid.updateWatchedVideos = function()
+    grid.isGrid = function()
     {
-        YTG.history.populateHistory(function() {
-            YTG.grid.markVideos();
-        });
+        return $('body').hasClass('ytg-gridable');
     };
 
+    grid.updateWatchedVideos = function()
+    {
+        if (YTG.grid.isGrid()) {
+            YTG.history.populateHistory(function () {
+                YTG.grid.markVideos();
+            });
+        }
+    };
 
     grid.allVideos = function(excludeWatched)
     {
