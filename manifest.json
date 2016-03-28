@@ -1,6 +1,6 @@
 {
 	"name": "Subscriptions Grid For YouTube™",
-	"version": "1.17.1",
+	"version": "1.17.2",
 	"manifest_version": 2,
 	"minimum_chrome_version" : "38",
 	"description": "Transforms Youtube's broken feed subscription page and restore it to it's former grid glory.",
