@@ -7,12 +7,20 @@ YTG.platform = (function (YTG, platform) {
 		chrome.storage.sync.get(item, callback);
 	};
 
-	platform.setStorageItem = function(key, data, callback)
+    platform.getLocalStorageItem = function(item, callback)
+    {
+        chrome.storage.local.get(item, callback);
+    };
+
+	platform.setStorageItem = function(object, callback)
 	{
-		var object = {};
-		object[key] = data;
 		chrome.storage.sync.set(object, callback);
 	};
+
+    platform.setLocalStorageItem = function(object, callback)
+    {
+        chrome.storage.local.set(object, callback);
+    };
 
     platform.getControlMarkup = function(callback)
     {

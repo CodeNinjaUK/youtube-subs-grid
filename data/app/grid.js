@@ -30,16 +30,22 @@ YTG.grid = (function (YTG, grid) {
 
     grid.updateWatchedVideos = function()
     {
-        YTG.platform.getStorageItem('watchHistory', function (data) {
-            YTG.history.setHistory(data.watchHistory);
+        YTG.history.populateHistory(function() {
             YTG.grid.markVideos();
         });
     };
 
 
-    grid.allVideos = function()
+    grid.allVideos = function(excludeWatched)
     {
-        return $('.yt-shelf-grid-item');
+        var videos = $('.yt-shelf-grid-item');
+
+        if (excludeWatched)
+        {
+            videos = videos.not('.watched, .ytg-watched');
+        }
+
+        return videos;
     };
 
     // "What the hell" I hear you thinking, "why do you need this?"
@@ -96,8 +102,9 @@ YTG.grid = (function (YTG, grid) {
 
         if (window.confirm('Are you sure you want to mark all videos as watched?')) {
             var videoArray = [];
-            grid.allVideos().each(function (idx, video) {
-                var videoId = $(video).find('.addto-watch-later-button').attr('data-video-ids');
+            var excludeWatched = true;
+            grid.allVideos(excludeWatched).each(function (idx, video) {
+                var videoId = $(video).find('.ytg-mark-watched').attr('data-video-ids');
 
                 videoArray.push(videoId);
             });
@@ -124,6 +131,11 @@ YTG.grid = (function (YTG, grid) {
             grid.cleanVideo(video);
             grid.markVideo(video);
         });
+
+        if (! YTG.grid.allVideos().find(':visible').length)
+        {
+            grid.loadMoreVideos();
+        }
     };
 
     grid.markVideo = function (videoElm) {
@@ -194,7 +206,7 @@ YTG.grid = (function (YTG, grid) {
         grid.hideVideos = !grid.hideVideos;
         grid.setViewToggle();
 
-        YTG.platform.setStorageItem('hideVideos', grid.hideVideos);
+        YTG.platform.setStorageItem({ hideVideos: grid.hideVideos });
     };
 
     grid.setViewToggle = function () {
@@ -269,7 +281,7 @@ YTG.grid = (function (YTG, grid) {
                 if ($('.ytg-subs-grid-settings-button').hasClass('ytg-has-updates'))
                 {
                     $('.ytg-subs-grid-settings-button').removeClass('ytg-has-updates');
-                    YTG.platform.setStorageItem('acknowledgedVersion', YTG.internalFeatureVersion);
+                    YTG.platform.setStorageItem({ acknowledgedVersion: YTG.internalFeatureVersion });
                 }
             }
         });
@@ -283,7 +295,7 @@ YTG.grid = (function (YTG, grid) {
 
         settingElement.prop('disabled', true);
 
-        YTG.platform.setStorageItem(name, val, function()
+        YTG.platform.setStorageItem({ name: val }, function()
         {
             grid.settings.scrollAutoLoadVideos = val;
             settingElement.prop('checked', val);

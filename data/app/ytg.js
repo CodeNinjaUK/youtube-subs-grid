@@ -6,14 +6,13 @@ YTG = (function (self) {
 
 	self.ytInit = function()
 	{
-        YTG.checkPage(window.location.href);
-
-		YTG.platform.getStorageItem('watchHistory', function(data)
-		{
-			YTG.history.setHistory(data.watchHistory);
+        YTG.history.populateHistory(function()
+        {
+            YTG.checkPage(window.location.href);
 
             //Is this a video watch page? Make sure we store that in the history
             //in case the user came from an external source.
+
             if ($('meta[itemprop="videoId"]').length)
             {
                 YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
@@ -26,7 +25,6 @@ YTG = (function (self) {
                 YTG.platform.broadcastVideoWatched();
 
             }
-
         });
 	};
 
@@ -124,7 +122,7 @@ YTG = (function (self) {
             var classicGridMode = !!$(this).find('.ytg-subs-grid-selector-icon').length;
             var link = $(this).attr('href');
 
-            YTG.platform.setStorageItem('classicGridMode', classicGridMode, function(data)
+            YTG.platform.setStorageItem({ classicGridMode : classicGridMode }, function(data)
             {
                 window.location.href = link;
             });

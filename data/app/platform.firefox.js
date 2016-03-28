@@ -5,7 +5,7 @@ YTG.platform = (function (YTG, platform) {
     platform.callbacks = [];
 
 	platform.getStorageItem = function(key, callback)
-	{
+    {
         var callbackName = 'storageGetCallback' + Math.random();
 
         var payload = {key: key, callbackName: callbackName};
@@ -14,20 +14,31 @@ YTG.platform = (function (YTG, platform) {
         self.port.once(callbackName, callback);
 
         self.port.emit("getStorage", payload);
-	};
+    };
 
-	platform.setStorageItem = function(key, value, callback)
+    platform.getLocalStorageItem = function(key, callback)
+    {
+        platform.getStorageItem(key, callback);
+    };
+
+	platform.setStorageItem = function(object, callback)
 	{
-        var payload = {key: key, value: value, callbackName: null};
+        object.callbackName = null;
 
 		if (typeof(callback) == 'function')
         {
-            payload.callbackName = 'storageSetCallback' + Math.random();
-            self.port.once(payload.callbackName, callback);
+            object.callbackName = 'storageSetCallback' + Math.random();
+            self.port.once(object.callbackName, callback);
         }
 
-		self.port.emit("setStorage", payload);
+		self.port.emit("setStorage", object);
 	};
+
+    platform.setLocalStorageItem = function(object, callback)
+    {
+        platform.setStorageItem(object, callback);
+    };
+
 
     platform.broadcastVideoWatched = function()
     {

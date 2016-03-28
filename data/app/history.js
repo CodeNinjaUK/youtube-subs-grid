@@ -2,24 +2,66 @@ var YTG = YTG || {};
 
 YTG.history = (function (YTG, history) {
 
-	// We don't have unlimted storage
+	// We don't have unlimited storage
 	// so there needs to be a limit on
 	// how big this history is.
-	history.maxVideoHistoryCount = 400;
+	history.maxVideoHistorySyncSlabSize = 200;
+	history.maxVideoHistorySyncSlabs = 10;
+	history.maxVideoHistoryCount = 5000;
 
+    history.watchHistory = [];
+	history.watchHistoryIndex = [];
+	history.extendedWatchHistory = [];
 
-	history.setHistory = function(watchHistory)
+	history.historySlabKeys = [];
+	for (var i = 0;i < history.maxVideoHistorySyncSlabs; i++)
 	{
-		history.watchHistory = watchHistory || [];
+		history.historySlabKeys.push('watchHistorySlab_' + i);
+	}
+
+
+	history.populateHistory = function(callback)
+	{
+		YTG.platform.getStorageItem(YTG.history.historySlabKeys, function (syncData) {
+			YTG.platform.getLocalStorageItem('extendedWatchHistory', function (localData) {
+
+				YTG.history.setHistory(syncData, localData.extendedWatchHistory);
+
+				callback();
+			});
+		});
+	};
+
+	history.setHistory = function(watchHistory, extendedWatchHistory)
+	{
+        extendedWatchHistory = extendedWatchHistory || [];
+
+		history.watchHistory = [];
+
+		for (var slabName in watchHistory)
+		{
+			history.watchHistory = history.watchHistory.concat(watchHistory[slabName]);
+		}
+
+		history.watchHistory = history.watchHistory.concat(extendedWatchHistory);
+
+		//YTG.history.reOrderHistory();
+
+		YTG.history.reIndexHistory();
+	};
+
+	history.recordVideo = function(videoId)
+	{
+		history.watchHistory.push({v: videoId, d: Math.ceil(Date.now())});
+		history.watchHistoryIndex.push(videoId);
 	};
 
 	history.addToHistory = function(videoId)
 	{
 		if (!history.videoIsInHistory(videoId))
 		{
-			history.watchHistory.push(videoId);
+			history.recordVideo(videoId);
 			history.saveHistory();
-			history.updateSubscriptions();
 		}
 	};
 
@@ -27,26 +69,47 @@ YTG.history = (function (YTG, history) {
 	{
 		videoIdArray.forEach(function(videoId)
 		{
-			if (!history.videoIsInHistory(videoId))
-			{
-				history.watchHistory.push(videoId);
-			}
+			history.recordVideo(videoId);
 		});
 
 		history.saveHistory();
-		history.updateSubscriptions();
+	};
+
+	history.saveHistory = function()
+	{
+		YTG.history.cullHistory();
+
+		var syncCount = YTG.history.maxVideoHistorySyncSlabSize * YTG.history.maxVideoHistorySyncSlabs;
+
+		var watchHistorySyncRaw = YTG.history.watchHistory.slice(0, syncCount);
+		var watchHistoryLocal = YTG.history.watchHistory.slice(syncCount);
+
+		var slabs = [];
+		while (watchHistorySyncRaw.length > 0) {
+			slabs.push(watchHistorySyncRaw.splice(0, YTG.history.maxVideoHistorySyncSlabSize));
+		}
+
+		var watchHistorySync = {};
+		history.historySlabKeys.forEach(function(slabKey, i) {
+			watchHistorySync[slabKey] = slabs[i] || [];
+		});
+
+		YTG.platform.setStorageItem(watchHistorySync, function()
+		{
+			YTG.platform.setLocalStorageItem({ extendedWatchHistory : watchHistoryLocal }, function()
+			{
+				YTG.platform.broadcastVideoWatched();
+			});
+		});
 	};
 
 	history.massRemoveFromHistory = function(videoIdArray)
 	{
-		videoIdArray.forEach(function(videoId)
-		{
-			if (history.videoIsInHistory(videoId))
-			{
-				var index = history.watchHistory.indexOf(videoId);
-				history.watchHistory.splice(index, 1);
+		for(var i = 0; i < history.watchHistory.length; i++) {
+			if(videoIdArray.indexOf(history.watchHistory[i].v) !== -1) {
+				history.watchHistory.splice(i, 1);
 			}
-		});
+		}
 
 		// Don't trigger subs update for this save.
 		history.saveHistory();
@@ -55,6 +118,8 @@ YTG.history = (function (YTG, history) {
     history.resetWatchHistory = function()
     {
         history.watchHistory = [];
+        history.extendedWatchHistory = [];
+		history.watchHistoryIndex = [];
         history.saveHistory();
     };
 
@@ -66,6 +131,7 @@ YTG.history = (function (YTG, history) {
        }
     };
 
+	// DEPRECIATED
 	history.updateSubscriptions = function()
 	{
 		if (YTG.grid && YTG.grid.isGridable(window.location.href))
@@ -76,18 +142,43 @@ YTG.history = (function (YTG, history) {
 
 	history.cullHistory = function()
 	{
-		history.watchHistory.splice(0, (history.watchHistory.length - history.maxVideoHistoryCount));
+		YTG.history.reOrderHistory();
+
+		YTG.history.watchHistory = YTG.history.watchHistory.slice(0, YTG.history.maxVideoHistoryCount);
+	};
+
+	history.reOrderHistory = function()
+	{
+		// http://stackoverflow.com/a/1129270/615519
+		YTG.history.watchHistory = YTG.history.watchHistory.sort(function(a,b) {
+			return (a.d - b.d);// ? 1 : ((b.d < a.d) ? -1 : 0);
+		});
+
+		YTG.history.watchHistory.reverse();
+	};
+
+	history.reIndexHistory = function()
+	{
+		// Re-index!
+		YTG.history.watchHistoryIndex = [];
+		YTG.history.watchHistory.forEach(function(video)
+		{
+			YTG.history.watchHistoryIndex.push(video.v);
+		});
 	};
 
 	history.removeFromHistory = function(videoId)
 	{
 		if (history.videoIsInHistory(videoId))
 		{
-			var index = history.watchHistory.indexOf(videoId);
-			history.watchHistory.splice(index, 1);
+			for(var i = 0; i < history.watchHistory.length; i++) {
+				if(history.watchHistory[i].v == videoId) {
+					history.watchHistory.splice(i, 1);
+					break;
+				}
+			}
 
 			history.saveHistory();
-			history.updateSubscriptions();
 		}
 	};
 
@@ -120,31 +211,13 @@ YTG.history = (function (YTG, history) {
 	{
 		// So pretty.
 		// This is because FF and Chrome have different ideas about what the target actually is.
-		if (!$(target).hasClass('addto-button') && !$(target).parents('button.addto-button').length && !$(target).hasClass('yt-user-name'))
-		{
-			return true;
-		}
+        return !$(target).hasClass('addto-button') && !$(target).parents('button.addto-button').length && !$(target).hasClass('yt-user-name');
+    };
 
-		return false;
-	};
-
-	history.saveHistory = function()
-	{
-		history.cullHistory();
-		YTG.platform.setStorageItem('watchHistory', history.watchHistory, function()
-        {
-            YTG.platform.broadcastVideoWatched();
-        });
-	};
 
 	history.videoIsInHistory = function(videoId)
 	{
-		if (history.watchHistory.indexOf(videoId) !== -1)
-		{
-			return true;
-		}
-
-		return false;
+		return history.watchHistoryIndex.indexOf(videoId) !== -1;
 	};
 
 	return history;
