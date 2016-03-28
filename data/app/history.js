@@ -184,6 +184,8 @@ YTG.history = (function (YTG, history) {
 		}
 	};
 
+	// DEPRECIATED?
+	/*
 	history.addToHistoryHandler = function(e)
 	{
 		// If we clicked on the watch later button we dont want to
@@ -195,6 +197,7 @@ YTG.history = (function (YTG, history) {
 			history.addToHistory(videoId);
 		}
 	};
+	*/
 
 	history.toggleWatchedHandler = function(e)
 	{

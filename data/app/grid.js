@@ -36,6 +36,7 @@ YTG.grid = (function (YTG, grid) {
     grid.updateWatchedVideos = function()
     {
         if (YTG.grid.isGrid()) {
+
             YTG.history.populateHistory(function () {
                 YTG.grid.markVideos();
             });
@@ -146,7 +147,7 @@ YTG.grid = (function (YTG, grid) {
 
     grid.markVideo = function (videoElm) {
         videoElm = $(videoElm);
-        var videoId = videoElm.find('.addto-watch-later-button').attr('data-video-ids');
+        var videoId = videoElm.find('[data-context-item-id]').attr('data-context-item-id');
 
         var videoLinkElm = videoElm.find('.yt-lockup-thumbnail a');
 
