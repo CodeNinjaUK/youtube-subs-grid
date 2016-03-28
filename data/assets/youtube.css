@@ -1,7 +1,25 @@
 .ytg-gridable.ytg-classic-mode.site-center-aligned #content {
     margin: 0 auto;
-    width: 98%;
+    /*width: 98%;*/
     max-width: 1880px;
+}
+
+@media only screen and (min-width:1730px) {
+    .ytg-gridable.ytg-classic-mode.site-center-aligned #content {
+        width: 1468px;
+    }
+}
+
+@media only screen and (min-width:1943px) {
+    .ytg-gridable.ytg-classic-mode.site-center-aligned #content {
+        width: 1674px;
+    }
+}
+
+@media only screen and (min-width:2143px) {
+    .ytg-gridable.ytg-classic-mode.site-center-aligned #content {
+        width: 1880px;
+    }
 }
 
 .ytg-gridable.ytg-classic-mode.site-center-aligned .ytg-controls
@@ -29,11 +47,6 @@
 .ytg-settings .yt-help-icon {
     margin-bottom: -3px;
 }
-
-.ytg-gridable.ytg-classic-mode.site-center-aligned ul.shelf-content { text-align: center; }
-.ytg-gridable.ytg-classic-mode.site-center-aligned ul.shelf-content > li { text-align: left; }
-
-
 
 .ytg-gridable button.ytg-mark-watched {
     background-image: url(https://s.ytimg.com/yts/imgbin/www-hitchhiker-vflqZgjUU.png) !important;
