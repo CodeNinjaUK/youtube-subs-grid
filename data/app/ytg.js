@@ -10,10 +10,12 @@ YTG = (function (self) {
         {
             YTG.checkPage(window.location.href);
 
-            //Is this a video watch page? Make sure we store that in the history
+            // Is this a video watch page? Make sure we store that in the history
             //in case the user came from an external source.
 
-            if ($('meta[itemprop="videoId"]').length)
+            // We also only care if the user is subscribed to this channel.
+
+            if ($('meta[itemprop="videoId"]').length && $('.yt-uix-subscription-button').data('is-subscribed'))
             {
                 YTG.history.addToHistory($('meta[itemprop="videoId"]').attr('content'));
 
