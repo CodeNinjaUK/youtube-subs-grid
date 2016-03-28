@@ -5,7 +5,7 @@
   "description": "Transforms Youtube's broken feed subscription page and restore it to it's former grid glory.",
   "author": "Bulk70",
   "license": "MPL 2.0",
-  "version": "1.16.1",
+  "version": "1.2.0.1",
   "main": "lib/firefox.js",
   "icon": "data/assets/icon-48.png",
   "icon64": "data/assets/icon-64.png"
