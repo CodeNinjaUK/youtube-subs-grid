@@ -39,6 +39,25 @@ YTG.platform = (function (YTG, platform) {
         platform.setStorageItem(object, callback);
     };
 
+    platform.removeStorageItem = function(keys, callback)
+    {
+        var payload = {keys: keys};
+
+        payload.callbackName = null;
+
+        if (typeof(callback) == 'function')
+        {
+            payload.callbackName = 'storageRemoveCallback' + Math.random();
+            self.port.once(payload.callbackName, callback);
+        }
+
+        self.port.emit("removeStorage", payload);
+    };
+
+    platform.removeLocalStorageItem = function(keys, callback)
+    {
+        platform.removeStorageItem(keys, callback);
+    };
 
     platform.broadcastVideoWatched = function()
     {

@@ -22,6 +22,17 @@ YTG.platform = (function (YTG, platform) {
         chrome.storage.local.set(object, callback);
     };
 
+    platform.removeStorageItem = function(object, callback)
+    {
+        chrome.storage.sync.remove(object, callback);
+    };
+
+    platform.removeLocalStorageItem = function(object, callback)
+    {
+        chrome.storage.local.remove(object, callback);
+    };
+
+
     platform.getControlMarkup = function(callback)
     {
         $.ajax({

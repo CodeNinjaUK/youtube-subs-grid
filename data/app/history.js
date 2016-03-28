@@ -42,12 +42,13 @@ YTG.history = (function (YTG, history) {
 		if (watchHistoryData['watchHistory'] && watchHistoryData['watchHistory'].length)
 		{
 			YTG.history.massAddToHistory(watchHistoryData['watchHistory']);
-
-			YTG.platform.setStorageItem({ watchHistory: null });
 		}
+
+		YTG.platform.removeStorageItem(['watchHistory']);
 
 		// Don't pass it further.
 		delete watchHistoryData['watchHistory'];
+		// End migration. Can delete after say June/July 2016.
 
 		for (var slabName in watchHistoryData)
 		{
