@@ -19,10 +19,11 @@ YTG.history = (function (YTG, history) {
 		history.historySlabKeys.push('watchHistorySlab_' + i);
 	}
 
-
 	history.populateHistory = function(callback)
 	{
-		YTG.platform.getStorageItem(YTG.history.historySlabKeys, function (syncData) {
+		var keys = YTG.history.historySlabKeys.slice(0);
+		keys.push('watchHistory'); // for migration.
+		YTG.platform.getStorageItem(keys, function (syncData) {
 			YTG.platform.getLocalStorageItem('extendedWatchHistory', function (localData) {
 
 				YTG.history.setHistory(syncData, localData.extendedWatchHistory);
@@ -32,20 +33,30 @@ YTG.history = (function (YTG, history) {
 		});
 	};
 
-	history.setHistory = function(watchHistory, extendedWatchHistory)
+	history.setHistory = function(watchHistoryData, extendedWatchHistory)
 	{
         extendedWatchHistory = extendedWatchHistory || [];
-
 		history.watchHistory = [];
 
-		for (var slabName in watchHistory)
+		// Migration.
+		if (watchHistoryData['watchHistory'] && watchHistoryData['watchHistory'].length)
 		{
-			history.watchHistory = history.watchHistory.concat(watchHistory[slabName]);
+			YTG.history.massAddToHistory(watchHistoryData['watchHistory']);
+
+			YTG.platform.setStorageItem({ watchHistory: null });
+		}
+
+		// Don't pass it further.
+		delete watchHistoryData['watchHistory'];
+
+		for (var slabName in watchHistoryData)
+		{
+			if (watchHistoryData[slabName] && watchHistoryData[slabName].length) {
+				history.watchHistory = history.watchHistory.concat(watchHistoryData[slabName]);
+			}
 		}
 
 		history.watchHistory = history.watchHistory.concat(extendedWatchHistory);
-
-		//YTG.history.reOrderHistory();
 
 		YTG.history.reIndexHistory();
 	};
@@ -130,15 +141,6 @@ YTG.history = (function (YTG, history) {
            history.resetWatchHistory();
        }
     };
-
-	// DEPRECIATED
-	history.updateSubscriptions = function()
-	{
-		if (YTG.grid && YTG.grid.isGridable(window.location.href))
-		{
-			YTG.grid.markVideos();
-		}
-	};
 
 	history.cullHistory = function()
 	{
