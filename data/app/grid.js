@@ -302,7 +302,9 @@ YTG.grid = (function (YTG, grid) {
 
         settingElement.prop('disabled', true);
 
-        YTG.platform.setStorageItem({ name: val }, function()
+        var setting = {};
+        setting[name] = val;
+        YTG.platform.setStorageItem(setting, function()
         {
             grid.settings.scrollAutoLoadVideos = val;
             settingElement.prop('checked', val);
