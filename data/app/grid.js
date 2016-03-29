@@ -4,7 +4,8 @@ YTG.grid = (function (YTG, grid) {
 
     grid.settings = {
         'acknowledgedVersion': 0,
-        'scrollAutoLoadVideos': true
+        'scrollAutoLoadVideos': true,
+        'bypassMarkWatchedAlert': false
     };
 
     grid.setup = function (isClassicGridMode) {
@@ -107,7 +108,7 @@ YTG.grid = (function (YTG, grid) {
 
     grid.markAllVisibleVideos = function () {
 
-        if (window.confirm('Are you sure you want to mark all videos as watched?')) {
+        if (YTG.grid.settings.bypassMarkWatchedAlert || window.confirm('Are you sure you want to mark all videos as watched?')) {
             var videoArray = [];
             var excludeWatched = true;
             grid.allVideos(excludeWatched).each(function (idx, video) {
