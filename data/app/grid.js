@@ -277,9 +277,9 @@ YTG.grid = (function (YTG, grid) {
                     $('.ytg-subs-grid-settings-button').addClass('ytg-has-updates');
                 }
 
-                Object.keys(grid.settings).forEach(function(key)
+                Object.keys(data).forEach(function(key)
                 {
-                    $('.ytg-settings input[name="'+key+'"]').prop('checked', grid.settings[key]);
+                    $('.ytg-settings input[name="'+key+'"]').prop('checked', data[key]);
                 });
 
 
@@ -305,10 +305,10 @@ YTG.grid = (function (YTG, grid) {
         var settingElement = $(this);
         var name = settingElement.attr('name');
         var val = settingElement.prop('checked'); // Ignore the value just get the opposite of its checked status.
+        var setting = {};
 
         settingElement.prop('disabled', true);
 
-        var setting = {};
         setting[name] = val;
         YTG.platform.setStorageItem(setting, function()
         {
