@@ -276,7 +276,12 @@ YTG.grid = (function (YTG, grid) {
                     $('.ytg-subs-grid-settings-button').addClass('ytg-has-updates');
                 }
 
-                $('.ytg-settings input[name="scrollAutoLoadVideos"]').prop('checked', data.scrollAutoLoadVideos);
+                Object.keys(grid.settings).forEach(function(key)
+                {
+                    $('.ytg-settings input[name="'+key+'"]').prop('checked', grid.settings[key]);
+                });
+
+
             });
         });
     };
@@ -306,7 +311,7 @@ YTG.grid = (function (YTG, grid) {
         setting[name] = val;
         YTG.platform.setStorageItem(setting, function()
         {
-            grid.settings.scrollAutoLoadVideos = val;
+            grid.settings[name] = val;
             settingElement.prop('checked', val);
 
             settingElement.prop('disabled', false);
