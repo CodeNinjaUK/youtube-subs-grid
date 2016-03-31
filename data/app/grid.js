@@ -27,6 +27,8 @@ YTG.grid = (function (YTG, grid) {
         grid.buildHistoryControls();
 
         grid.watchForGridChanges();
+
+        $(window).scroll(YTG.grid.scrollHandler);
     };
 
     grid.isGrid = function()

@@ -11,6 +11,4 @@ documentElement.on("spfdone", YTG.ytInit);
 documentElement.on('click', '.ytg-mark-watched:not(.watched .ytg-mark-watched)', YTG.history.toggleWatchedHandler);
 documentElement.on('click', '.ytg-reset-mark-all-watched', YTG.history.resetWatchHistoryHandler);
 documentElement.on('click', '.ytg-subs-grid-settings-button, .ytg-exit-settings', YTG.grid.settingsClickedHandler);
-documentElement.on('click', '.ytg-settings .ytg-setting', YTG.grid.settingCheckboxClickedHandler)
-
-$(window).scroll(YTG.grid.scrollHandler);
+documentElement.on('click', '.ytg-settings .ytg-setting', YTG.grid.settingCheckboxClickedHandler);

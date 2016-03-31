@@ -137,7 +137,7 @@ YTG = (function (self) {
 		evObj.initEvent(eventType, true, false);
 
 		elem.dispatchEvent(evObj);
-	}
+	};
 
 	return self;
 }(YTG || {}));
