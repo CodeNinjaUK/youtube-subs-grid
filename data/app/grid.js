@@ -26,7 +26,9 @@ YTG.grid = (function (YTG, grid) {
         // Append our show/hide toggle
         grid.buildHistoryControls();
 
-        grid.watchForGridChanges();
+        YTG.grid.showAllLoadedVideos();
+
+        YTG.grid.watchForGridChanges();
 
         $(window).scroll(YTG.grid.scrollHandler);
     };
@@ -78,10 +80,7 @@ YTG.grid = (function (YTG, grid) {
 
                 YTG.grid.markVideos();
 
-                // Really YT? YT added this code to only show 10 videos per day. This shows ALL videos
-                // per day because why on earth would I subscribe to a channel I don't want to see videos from?!
-                $('.yt-uix-expander').removeClass('yt-uix-expander-collapsed');
-                $('.yt-uix-expander-head').remove();
+                YTG.grid.showAllLoadedVideos();
 
                 // Are we in Classic mode? Fire cleanup for that too.
                 if (YTG.grid.isClassicGridMode)
@@ -96,6 +95,14 @@ YTG.grid = (function (YTG, grid) {
 
         // pass in the target node, as well as the observer options
         observer.observe(target, config);
+    };
+
+    grid.showAllLoadedVideos = function()
+    {
+        // Really YT? YT added this code to only show 10 videos per day. This shows ALL videos
+        // per day because why on earth would I subscribe to a channel I don't want to see videos from?!
+        $('.yt-uix-expander').removeClass('yt-uix-expander-collapsed');
+        $('.yt-uix-expander-head').remove();
     };
 
     grid.classicModeCleanup = function()
